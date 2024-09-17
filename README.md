@@ -114,64 +114,66 @@ Verify that your SQLite database file is correctly set up before starting the ba
 3.	User can view appointment history and make changes to upcoming appointments.
 4.	User can view stylist profile.
 
+## React Tree Diagram 
+![React Tree MoonHead](https://github.com/user-attachments/assets/5c9e5ae3-70ea-447f-a065-ea7ed613e58b)
+
 ## Schema
+![ERD MoonHead](https://github.com/user-attachments/assets/ea00879a-bd3b-4494-8312-2fec2feb6775)
+
 	Example models:
  
 	class User — id, username, email, password
 			  appointments = db.relationship – Appointment, user
 			  hairstyles = asso proxy – appointments, hairstyle
-				
+
+			User has many appointments (one-to-many)
+			
+			Appointment belongs to one User
+		
+			User has many hairstyles (many-to-many through appointments)
+   				
 	class Hairstyle – id, name, moon_phase_id(fk)
 			appointments = db.relationship – Appointment, hairstyle
 			moon_phase = db.relationship – MoonPhase, hairstyles_moon
+   	
+			User can have many hairstyles
+			
+			Many-to-many through appointments
+		
+			Hairstyle belongs to MoonPhase
 			
 	class MoonPhase – id, phase, date
-			hairstyles_moon = db.relationship—Hairstyle, moon_phase 
+			hairstyles_moon = db.relationship— Hairstyle, moon_phase 
+   		
+	     		MoonPhase has many hairstyles
 		
 	class Stylist – id, name, specialty (color or cut)
 			appointments = db.relationship – Appointment, stylist
+   		  		
+	      		Stylist has many appointments (one-to-many)
+	      		
+			Appointment belongs to one Stylist
 	
-	class Appointment – join table – id, date, time, user_id(fk), harstyle_id(fk), stylist_id(fk) 
+ 	class Appointment – join table – id, date, time, user_id(fk), harstyle_id(fk), stylist_id(fk) 
 			user = db.relationshp – User, appointments
 			hairstyle = db.relatonship – Hairstyle, appointments
 			stylist = db.relationship—Stylist, appointments
+
+   
 
 
 ### Validations/Constraints 
 Example validations and constraints
 
 #### Validations
-Email format = @
-Password length (5)
-Image = url
+	Email format = @
+	Password length (5)
+	Image = url
 
 #### Constraints
-User.email = required, unique
-User.username = required, unique
-Appointment.date and Appointment.time = required
-
-
-## React Tree Diagram 
-
-	App -- state -- moon phase and user 
-		Nav Bar 
-  
-		Home --- moonPhase, recommendedHairstyles
-
-  		HairstyleList —
-    
-			HairStyleCard --- name, moonPhase
-   
-		AppointmentForm --- selectedHairstyle, availableStylist
-  
-		UserProfile --- userAppointments, createNewUser
-  
-		NewUserForm-- createUser
-  
-		StylistList--- stylists
-			
-   			StylistCard—stylist
-
+	User.email = required, unique
+	User.username = required, unique
+	Appointment.date and Appointment.time = required
 
 ## API Routes
 

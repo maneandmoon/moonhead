@@ -268,7 +268,10 @@ A list of your API routes (includes HTTP Verb, Endpoint, Purpose):
 7. Allow users to leave reviews after verified appointments.
 
 ## Kanban Board
-https://lucid.app/lucidspark/eb068605-dc0f-431f-952d-19099a7f6d25/edit?viewport_loc=-608%2C-955%2C3454%2C1653%2C0_0&invitationId=inv_c490abfc-0086-408c-8610-524e0ec44a97
-![KanbanMoonHead](https://github.com/user-attachments/assets/d780b6e4-8b3b-49d4-b930-c5b04f8848be)
+https://lucid.app/lucidspark/eb068605-dc0f-431f-952d-19099a7f6d25/edit?viewport_loc=-629%2C-996%2C3454%2C1653%2C0_0&invitationId=inv_c490abfc-0086-408c-8610-524e0ec44a97
+
+![KanbanMoonHead](https://github.com/user-attachments/assets/68256bc4-0337-4163-8a32-43ec5f60dc31)
+
+
 
 

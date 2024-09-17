@@ -1,357 +1,255 @@
-# Phase 4 Full-Stack Application Project Template
+# Phase 5 Capstone Project
 
-## Learning Goals
-
-- Discuss the basic directory structure of a full-stack Flask/React application.
-- Carry out the first steps in creating your Phase 4 project.
-
+## MoonHead
 ---
+## Description
 
-## Introduction
+MoonHead is a lunar hair-styling app that offers personalized hairstyles based on the moon’s phases and allows the user to book appointments with a stylist.
 
-Fork and clone this lesson for a template for your full-stack application. Take
-a look at the directory structure before we begin (NOTE: node_modules will be
-generated in a subsequent step):
+### Prerequisites
 
-```console
-$ tree -L 2
-$ # the -L argument limits the depth at which we look into the directory structure
-.
-├── CONTRIBUTING.md
-├── LICENSE.md
-├── Pipfile
-├── README.md
-├── client
-│   ├── README.md
-│   ├── package.json
-│   ├── public
-│   └── src
-└── server
-    ├── app.py
-    ├── config.py
-    ├── models.py
-    └── seed.py
-```
+Before starting, make sure you have completed the following:
 
-A `migrations` folder will be added to the `server` directory in a later step.
+Git is installed.
 
-The `client` folder contains a basic React application, while the `server`
-folder contains a basic Flask application. You will adapt both folders to
-implement the code for your project .
+You have a GitHub account.
 
-NOTE: If you did not previously install `tree` in your environment setup, MacOS
-users can install this with the command `brew install tree`. WSL and Linux users
-can run `sudo apt-get install tree` to download it as well.
+Node.js and npm are installed.
 
-## Where Do I Start?
+Python and pipenv are installed.
 
-Just as with your Phase 3 Project, this will likely be one of the biggest
-projects you've undertaken so far. Your first task should be creating a Git
-repository to keep track of your work and roll back any undesired changes.
+Honcho is installed for managing Procfile-based applications.
 
-### Removing Existing Git Configuration
+### Getting Started
 
-If you're using this template, start off by removing the existing metadata for
-Github and Canvas. Run the following command to carry this out:
+To set up a local instance, follow these steps:
 
-```console
-$ rm -rf .git .canvas
-```
+#### Front-end Installation
 
-The `rm` command removes files from your computer's memory. The `-r` flag tells
-the console to remove _recursively_, which allows the command to remove
-directories and the files within them. `-f` removes them permanently.
+1. Clone the repository:
 
-`.git` contains this directory's configuration to track changes and push to
-Github (you want to track and push _your own_ changes instead), and `.canvas`
-contains the metadata to create a Canvas page from your Git repo. You don't have
-the permissions to edit our Canvas course, so it's not worth keeping around.
+git clone git@github.com:your-username/moonhead.git
 
-### Creating Your Own Git Repo
+2. Change to the root directory:
 
-First things first- rename this directory! Once you have an idea for a name,
-move one level up with `cd ..` and run
-`mv python-p4-project-template <new-directory-name>` to change its name (replace
-<new-directory-name> with an appropriate project directory name).
+cd moonhead
 
-> **Note: If you typed the `mv` command in a terminal within VS Code, you should
-> close VS Code then reopen it.**
+3. Install npm packages:
 
-> **Note: `mv` actually stands for "move", but your computer interprets this
-> rename as a move from a directory with the old name to a directory with a new
-> name.**
+npm install
 
-`cd` back into your new directory and run `git init` to create a local git
-repository. Add all of your local files to version control with `git add --all`,
-then commit them with `git commit -m'initial commit'`. (You can change the
-message here- this one is just a common choice.)
+4. Move to the front-end directory:
 
-Navigate to [GitHub](https://github.com). In the upper-right corner of the page,
-click on the "+" dropdown menu, then select "New repository". Enter the name of
-your local repo, choose whether you would like it to be public or private, make
-sure "Initialize this repository with a README" is unchecked (you already have
-one), then click "Create repository".
+cd client
 
-Head back to the command line and enter
-`git remote add origin git@github.com:github-username/new-repository-name.git`.
-NOTE: Replace `github-username` with your github username, and
-`new-repository-name` with the name of your new repository. This command will
-map the remote repository to your local repository. Finally, push your first
-commit with `git push -u origin main`.
+5. Install npm packages in the front-end directory:
 
-Your project is now version-controlled locally and online. This will allow you
-to create different versions of your project and pick up your work on a
-different machine if the need arises.
+npm install
 
----
+#### Back-end Installation
 
-## Setup
+Make sure you are in the root directory of the project.
 
-### `server/`
+Install pipenv and the necessary dependencies:
 
-The `server/` directory contains all of your backend code.
-
-`app.py` is your Flask application. You'll want to use Flask to build a simple
-API backend like we have in previous modules. You should use Flask-RESTful for
-your routes. You should be familiar with `models.py` and `seed.py` by now, but
-remember that you will need to use Flask-SQLAlchemy, Flask-Migrate, and
-SQLAlchemy-Serializer instead of SQLAlchemy and Alembic in your models.
-
-The project contains a default `Pipfile` with some basic dependencies. You may
-adapt the `Pipfile` if there are additional dependencies you want to add for
-your project.
-
-To download the dependencies for the backend server, run:
-
-```console
 pipenv install
+
+Activate the virtual environment:
+
 pipenv shell
-```
 
-You can run your Flask API on [`localhost:5555`](http://localhost:5555) by
-running:
+#### Database Setup
 
-```console
-python server/app.py
-```
+Navigate to the data directory:
 
-Check that your server serves the default route `http://localhost:5555`. You
-should see a web page with the heading "Project Server".
+cd server/Database-Imports
 
-### `client/`
+Create a database file from the SQL file:
 
-The `client/` directory contains all of your frontend code. The file
-`package.json` has been configured with common React application dependencies,
-include `react-router-dom`. The file also sets the `proxy` field to forward
-requests to `"http://localhost:5555". Feel free to change this to another port-
-just remember to configure your Flask app to use another port as well!
+sqlite3 app.db < backup.sql
 
-To download the dependencies for the frontend client, run:
+Alternatively, you can create a migration environment by navigating to cd server and following these prompts to create two new directories-- instance and migrations, where app.db will be added to the instance directory.
 
-```console
-npm install --prefix client
-```
+    flask db init
 
-You can run your React app on [`localhost:3000`](http://localhost:3000) by
-running:
+    flask db migrate -m "Initial migration."
 
-```sh
-npm start --prefix client
-```
+    flask db upgrade
 
-Check that your the React client displays a default page
-`http://localhost:3000`. You should see a web page with the heading "Project
-Client".
+    python seed.py
 
-## Generating Your Database
+#### Running the Application
 
-NOTE: The initial project directory structure does not contain the `instance` or
-`migrations` folders. Change into the `server` directory:
+Ensure you are in the root directory of the project.
 
-```console
-cd server
-```
+Start the application using Honcho:
 
-Then enter the commands to create the `instance` and `migrations` folders and
-the database `app.db` file:
+honcho start -f Procfile.dev
 
-```
-flask db init
-flask db upgrade head
-```
+#### API Usage
 
-Type `tree -L 2` within the `server` folder to confirm the new directory
-structure:
+To interact with the API, send requests to the endpoints defined in your backend. For example:
 
-```console
-.
-├── app.py
-├── config.py
-├── instance
-│   └── app.db
-├── migrations
-│   ├── README
-│   ├── __pycache__
-│   ├── alembic.ini
-│   ├── env.py
-│   ├── script.py.mako
-│   └── versions
-├── models.py
-└── seed.py
-```
+curl -X GET http://localhost:3000
 
-Edit `models.py` and start creating your models. Import your models as needed in
-other modules, i.e. `from models import ...`.
+Alternatively, use a tool like Postman to set the URL to your local server's API endpoint and make your desired requests.
 
-Remember to regularly run
-`flask db revision --autogenerate -m'<descriptive message>'`, replacing
-`<descriptive message>` with an appropriate message, and `flask db upgrade head`
-to track your modifications to the database and create checkpoints in case you
-ever need to roll those modifications back.
+#### Additional Notes
 
-> **Tip: It's always a good idea to start with an empty revision! This allows
-> you to roll all the way back while still holding onto your database. You can
-> create this empty revision with `flask db revision -m'Create DB'`.**
+Verify that your SQLite database file is correctly set up before starting the back-end server.
 
-If you want to seed your database, now would be a great time to write out your
-`seed.py` script and run it to generate some test data. Faker has been included
-in the Pipfile if you'd like to use that library.
+## Wireframe
 
----
+1.	Home – show the moon phase and hairstyles 
+2.	View Hairstyles {Price list(maybe stretch goal), services (maybe stretch goal)}
+3.	Appointment booking
+4.	User profile and appointment history
+5.	Stylist profile
 
-#### `config.py`
 
-When developing a large Python application, you might run into a common issue:
-_circular imports_. A circular import occurs when two modules import from one
-another, such as `app.py` and `models.py`. When you create a circular import and
-attempt to run your app, you'll see the following error:
+## User Stories
 
-```console
-ImportError: cannot import name
-```
+1.	User can view hairstyle recommendations based on current moon phases and style hair according to lunar cycles.
+2.	User can view price list, services offered, and browse hairstyles
+3.	User can view appointment history and make changes to upcoming appointments.
+4.	User can view stylist profile.
 
-If you're going to need an object in multiple modules like `app` or `db`,
-creating a _third_ module to instantiate these objects can save you a great deal
-of circular grief. Here's a good start to a Flask config file (you may need more
-if you intend to include features like authentication and passwords):
+## Schema
 
-```py
-# Standard library imports
+class User— id, username, email, password
+  appointments = db.relationship – Appointment, user
+  hairstyles = asso proxy – appointments, hairstyle
+  serializer rules -
+	
+class Hairstyle – id, name, moon_phase_id(fk)
+	appointments = db.relationship – Appointment, hairstyle
+	moon_phase = db.relationship – MoonPhase, hairstyles_moon
+	serializer rules –
 
-# Remote library imports
-from flask import Flask
-from flask_cors import CORS
-from flask_migrate import Migrate
-from flask_restful import Api
-from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import MetaData
+class MoonPhase – id, phase, date
+	hairstyles_moon = db.relationship—Hairstyle, moon_phase 
+	
+class Stylist – id, name, specialty (color or cut)
+		appointments = db.relationship – Appointment, stylist
 
-# Local imports
+class Appointment – join table – id, date, time, user_id(fk), harstyle_id(fk), stylist_id(fk) 
+	user = db.relationshp – User, appointments
+	hairstyle = db.relatonship – Hairstyle, appointments
+	stylist = db.relationship—Stylist, appointments
 
-# Instantiate app, set attributes
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.json.compact = False
 
-# Define metadata, instantiate db
-metadata = MetaData(naming_convention={
-    "fk": "fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s",
-})
-db = SQLAlchemy(metadata=metadata)
-migrate = Migrate(app, db)
-db.init_app(app)
+### Validations/Constraints 
 
-# Instantiate REST API
-api = Api(app)
+#### Validations
+Email format = @
+Password length (5)
+Image = url
 
-# Instantiate CORS
-CORS(app)
+#### Constraints
+User.email = required, unique
+User.username = required, unique
+Appointment.date and Appointment.time = required
 
-```
 
-Now let's review that last line...
+## React Tree Diagram 
 
-#### CORS
+App -- state -- moon phase and user 
+  Nav Bar 
+  Home --- moonPhase, recommendedHairstyles
+  HairstyleList —
+		HairStyleCard --- name, moonPhase
+	AppointmentForm --- selectedHairstyle, availableStylist
+	UserProfile --- userAppointments, createNewUser
+	NewUserForm-- createUser
+	StylistList--- stylists
+		StylistCard—stylist
 
-CORS (Cross-Origin Resource Sharing) is a system that uses HTTP headers to
-determine whether resources from different servers-of-origin can be accessed. If
-you're using the fetch API to connect your frontend to your Flask backend, you
-need to configure CORS on your Flask application instance. Lucky for us, that
-only takes one line:
 
-```py
-CORS(app)
+## API Routes
 
-```
+A list of your API routes (includes HTTP Verb, Endpoint, Purpose):
 
-By default, Flask-CORS enables CORS on all routes in your application with all
-fetching servers. You can also specify the resources that allow CORS. The
-following specifies that routes beginning with `api/` allow CORS from any
-originating server:
+### User Routes
 
-```py
-CORS(app, resources={r"/api/*": {"origins": "*"}})
+GET /users: Retrieve a list of all users.
 
-```
+GET /users/<id>: Retrieve a specific user by ID.
 
-You can also set this up resource-by-resource by importing and using the
-`@cross_origin` decorator:
+POST /users: Create a new user.
 
-```py
-@app.route("/")
-@cross_origin()
-def howdy():
-  return "Howdy partner!"
+PATCH /users/<id>: Partially update a specific user by ID.
 
-```
+DELETE /users/<id>: Delete a specific user by ID.
 
----
 
-## Updating Your README.md
+### Stylist Routes
 
-`README.md` is a Markdown file that describes your project. These files can be
-used in many different ways- you may have noticed that we use them to generate
-entire Canvas lessons- but they're most commonly used as homepages for online
-Git repositories. **When you develop something that you want other people to
-use, you need to have a README.**
+GET /stylists: Retrieve a list of all stylists.
 
-Markdown is not a language that we cover in Flatiron's Software Engineering
-curriculum, but it's not a particularly difficult language to learn (if you've
-ever left a comment on Reddit, you might already know the basics). Refer to the
-cheat sheet in this lesson's resources for a basic guide to Markdown.
+GET /stylists/<id>: Retrieve a specific stylist by ID.
 
-### What Goes into a README?
+POST /stylists: Create a new stylist.
 
-This README should serve as a template for your own- go through the important
-files in your project and describe what they do. Each file that you edit (you
-can ignore your migration files) should get at least a paragraph. Each function
-should get a small blurb.
+PATCH /stylists/<id>: Partially update a specific stylist by ID.
 
-You should descibe your application first, and with a good level of detail. The
-rest should be ordered by importance to the user. (Probably routes next, then
-models.)
+DELETE /stylists/<id>: Delete a specific stylist by ID.
 
-Screenshots and links to resources that you used throughout are also useful to
-users and collaborators, but a little more syntactically complicated. Only add
-these in if you're feeling comfortable with Markdown.
 
----
 
-## Conclusion
+### Hairstyle Routes 
 
-A lot of work goes into a full-stack application, but it all relies on concepts
-that you've practiced thoroughly throughout this phase. Hopefully this template
-and guide will get you off to a good start with your Phase 4 Project.
+GET /hairstyles: Retrieve a list of all hairstyles.
 
-Happy coding!
+GET /hairstyles/<id>: Retrieve a specific hairstyle by ID.
 
----
+POST /hairstyles: Create a new hairstyle.
 
-## Resources
+PATCH /hairstyles/<id>: Partially update a specific hairstyle by ID.
 
-- [Setting up a respository - Atlassian](https://www.atlassian.com/git/tutorials/setting-up-a-repository)
-- [Create a repo- GitHub Docs](https://docs.github.com/en/get-started/quickstart/create-a-repo)
-- [Markdown Cheat Sheet](https://www.markdownguide.org/cheat-sheet/)
-- [Python Circular Imports - StackAbuse](https://stackabuse.com/python-circular-imports/)
-- [Flask-CORS](https://flask-cors.readthedocs.io/en/latest/)
+DELETE /hairstyles/<id>: Delete a specific hairstyle by ID.
+
+
+### Appointment Routes
+
+GET /appointments: Retrieve a list of all appointments.
+
+GET /appointments/<id>: Retrieve a specific appointment by ID.
+
+POST /appointments: Create a new appointment.
+
+PATCH /appointments/<id>: Partially update a specific appointment by ID.
+
+DELETE /appointments/<id>: Delete a specific appointment by ID.
+
+
+### MoonPhase Routes
+
+GET /moon-phase: Fetch the current moon phase
+
+curl --request GET \
+	--url 'https://moon-phase.p.rapidapi.com/calendar?format=html' \
+	--header 'x-rapidapi-host: moon-phase.p.rapidapi.com' \
+	--header 'x-rapidapi-key: Sign Up for Key'
+
+## Stretch Goals
+
+1. Add Admin Authorization to update stylists -- delete or create new stylist.
+2. Authenication for secure user login.
+3. Include price list and additional services offered page
+4. Add a user profile feature for tracking past hairstyles and appointments.
+5. Implement push notifications to remind users about upcoming moon phases or scheduled appointments.
+6. Integrate astrology into hairstyle recommendations (e.g., based on zodiac signs).
+7. Allow users to leave reviews after verified appointments.
+
+## Kanban Board
+
+To Do, In Progess, Testing, Done
+
+Build Models
+Build App.py
+Seed Data
+Build backend for new user, new stylist, new appointment, update appointmen
+Use Moon API
+Setup React  
+Use Formik and yup
+React routes

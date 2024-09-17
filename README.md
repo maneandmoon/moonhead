@@ -99,6 +99,8 @@ Alternatively, use a tool like Postman to set the URL to your local server's API
 Verify that your SQLite database file is correctly set up before starting the back-end server.
 
 ## Wireframe
+https://lucid.app/lucidspark/5ebfdb01-6613-4156-8b12-812118269859/edit?viewport_loc=-1232%2C-12889%2C14348%2C26584%2C0_0&invitationId=inv_9605c5de-aa78-45b9-88b2-9c4164eb95bf
+
 ![HomeMoonHead](https://github.com/user-attachments/assets/51d34318-be1b-43f4-8345-13483fa9e508)
 ![HairstylesMoonHead](https://github.com/user-attachments/assets/7836cefc-2e84-4cda-9c02-bf96b62f855c)
 ![StylistMoonHead](https://github.com/user-attachments/assets/86e8dbd2-de4d-41f3-87dd-5a78ba5d7cde)

@@ -118,7 +118,14 @@ Verify that your SQLite database file is correctly set up before starting the ba
 ![React Tree MoonHead](https://github.com/user-attachments/assets/5c9e5ae3-70ea-447f-a065-ea7ed613e58b)
 
 ## Schema
+
+One Join Table
 ![ERD MoonHead](https://github.com/user-attachments/assets/ea00879a-bd3b-4494-8312-2fec2feb6775)
+
+
+Multiple Join Tables
+![ERD2 MoonHead](https://github.com/user-attachments/assets/e4c74c33-a11a-4de2-aaca-faefe5a8f2e0)
+
 
 	Example models:
  
@@ -158,6 +165,7 @@ Verify that your SQLite database file is correctly set up before starting the ba
 			user = db.relationshp – User, appointments
 			hairstyle = db.relatonship – Hairstyle, appointments
 			stylist = db.relationship—Stylist, appointments
+
 
    
 

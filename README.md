@@ -99,12 +99,20 @@ Alternatively, use a tool like Postman to set the URL to your local server's API
 Verify that your SQLite database file is correctly set up before starting the back-end server.
 
 ## Wireframe
+![HomeMoonHead](https://github.com/user-attachments/assets/51d34318-be1b-43f4-8345-13483fa9e508)
+![HairstylesMoonHead](https://github.com/user-attachments/assets/7836cefc-2e84-4cda-9c02-bf96b62f855c)
+![StylistMoonHead](https://github.com/user-attachments/assets/86e8dbd2-de4d-41f3-87dd-5a78ba5d7cde)
+![AppointmentMoonHead](https://github.com/user-attachments/assets/705eee49-487e-42b1-98e4-7aa34c9ba89c)
+![UserProfileMoonHead](https://github.com/user-attachments/assets/6f144b9b-716b-4b99-8a22-47913cc76f0f)
+![LoginMoonHead](https://github.com/user-attachments/assets/ef1af6d7-26dc-41ea-b5f2-f76a055e19c8)
+
 
 1.	Home – show the moon phase and hairstyles 
 2.	View Hairstyles {Price list(maybe stretch goal), services (maybe stretch goal)}
-3.	Appointment booking
-4.	User profile and appointment history
-5.	Stylist profile
+3.	Stylists
+4.	Appointment booking
+5.	User profile
+6.	Login
 
 
 ## User Stories
@@ -115,7 +123,7 @@ Verify that your SQLite database file is correctly set up before starting the ba
 4.	User can view stylist profile.
 
 ## React Tree Diagram 
-![React Tree MoonHead](https://github.com/user-attachments/assets/5c9e5ae3-70ea-447f-a065-ea7ed613e58b)
+![TreeMoonHeadnoStylistform](https://github.com/user-attachments/assets/aacbddff-b162-47e0-84b1-36d62266c82d)
 
 ## Schema
 

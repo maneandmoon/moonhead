@@ -5,6 +5,7 @@
 # Remote library imports
 from flask import request, make_response
 from flask_restful import Resource
+from datetime import datetime
 
 # Local imports
 from config import app, db, api
@@ -18,17 +19,28 @@ from models import db, User, Hairstyle, Stylist, Appointment
 def index():
     return '<h1>Project Server</h1>'
 
-
-if __name__ == '__main__':
-    app.run(port=5555, debug=True)
-
 # User
 
 class UserList(Resource):
     def get(self):
         users = User.query.all()
-        return make_response([{'id': user.id, 'username': user.username, 'email': user.email} for user in users], 200)
-          
+        return make_response([{
+            'id': user.id, 
+            'username': user.username, 
+            'email': user.email, 
+            'birthdate': user.birthdate.strftime('%Y-%m-%d')   #to format it w/o GMT
+            } for user in users], 200)
+    
+    def post(self):
+        data = request.get_json()
+        birthdate = datetime.strptime(data['birthdate'], '%Y-%m-%d')
+        new_user = User(username=data['username'], email=data['email'], birthdate=birthdate)
+
+        # , password_hash=data['password']
+        db.session.add(new_user)
+        db.session.commit()
+        return make_response({'id': new_user.id}, 201)
+                
 api.add_resource(UserList, '/users')    
 
 class UserResource(Resource):
@@ -36,14 +48,12 @@ class UserResource(Resource):
         user = User.query.get(id)
         if user is None:
             return make_response({'message': 'User not found'}, 404)
-        return make_response({'id': user.id, 'username': user.username, 'email': user.email}, 200)
-
-    def post(self):
-        data = request.get_json()
-        new_user = User(username=data['username'], email=data['email'], password_hash=data['password'])
-        db.session.add(new_user)
-        db.session.commit()
-        return make_response({'id': new_user.id}, 201)
+        return make_response({
+            'id': user.id, 
+            'username': user.username, 
+            'email': user.email, 
+            'birthdate': user.birthdate.strftime('%Y-%m-%d') 
+            }, 200)
 
     def patch(self, id):
         user = User.query.get(id)
@@ -223,18 +233,19 @@ api.add_resource(AppointmentResource, '/appointments/<int:id>')
 # calendar format in html...change to json? format=json
 # url = 'https://moon-phase.p.rapidapi.com/calendar?format=json'
 
-class MoonPhaseResource(Resource):
-    def get(self):
-        moon_phase_data = response.json()
-        url = 'https://moon-phase.p.rapidapi.com/calendar?format=html'
-        headers = {
-            'x-rapidapi-host': 'moon-phase.p.rapidapi.com',
-            'x-rapidapi-key': 'Sign Up for Key'
-        }  
+# class MoonPhaseResource(Resource):
+#     def get(self):
+#         moon_phase_data = response.json()
+#         url = 'https://moon-phase.p.rapidapi.com/calendar?format=html'
+#         headers = {
+#             'x-rapidapi-host': 'moon-phase.p.rapidapi.com',
+#             'x-rapidapi-key': 'Sign Up for Key'
+#         }  
 
-        return make_response(moon_phase_data, 200)
+#         return make_response(moon_phase_data, 200)
 
-api.add_resource(MoonPhaseResource, '/moon-phase')
+# api.add_resource(MoonPhaseResource, '/moon-phase')
 
-
+if __name__ == '__main__':
+    app.run(port=5555, debug=True)
 

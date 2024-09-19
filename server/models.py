@@ -64,7 +64,10 @@ class User(db.Model):
     
     @validates('birthdate')
     def validate_birthdate(self, key, user_birthdate):
-        if user_birthdate >= datetime.now().date():
+        if isinstance(user_birthdate, str):
+            user_birthdate = datetime.strptime(user_birthdate, '%Y-%m-%d')
+        
+        if user_birthdate >= datetime.now():
             raise ValueError("Birthdate must be in the past.")
         return user_birthdate
 

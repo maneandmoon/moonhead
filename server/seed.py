@@ -8,10 +8,26 @@ from faker import Faker
 
 # Local imports
 from app import app
-from models import db
+from models import db, User, Hairstyle, Stylist, MoonPhase, Appointment
 
 if __name__ == '__main__':
     fake = Faker()
     with app.app_context():
         print("Starting seed...")
         # Seed code goes here!
+
+
+
+        # Create users
+        users = []
+        for _ in range(30):
+            user = User(
+                username=fake.user_name(),
+                # email=fake.email(),
+                # password=fake.password(),
+                bio=fake.text(max_nb_chars=200),
+                # avatar=fake.image_url()
+            )
+            users.append(user)
+            db.session.add(user)
+        db.session.commit()

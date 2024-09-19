@@ -14,6 +14,8 @@ from config import db
 
 
 class User(db.Model):
+    __tablename__ = 'users'
+
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String, unique=True, nullable=False)
     email = db.Column(db.String, unique=True, nullable=False)
@@ -21,14 +23,16 @@ class User(db.Model):
     birthdate = db.Column(db.Date, nullable=False)
     # phone_number =
     # zodiac =
+    created_at = db.Column(db.DateTime, server_default=db.func.now())
+    updated_at = db.Column(db.DateTime, onupdate=db.func.now())
 
     appointments = db.relationship('Appointment', back_populates='user')
     hairstyles = association_proxy('appointments', 'hairstyle')
 
     @validates('username')
     def validate_username(self, key, username):
-        if len(username) < 3 or len(username) > 10:
-            raise ValueError("Username must be between 3 and 10 characters.")
+        if len(username) < 3 or len(username) > 30:
+            raise ValueError("Username must be between 3 and 30 characters.")
         return username
     
     @validates('email')
@@ -65,18 +69,45 @@ class User(db.Model):
         return user_birthdate
 
 class Stylist(db.Model):
+    __tablename__ = 'stylists'
+
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
     specialty = db.Column(db.String)
+    created_at = db.Column(db.DateTime, server_default=db.func.now())
+    updated_at = db.Column(db.DateTime, onupdate=db.func.now())
 
     # Relationships
     appointments = db.relationship('Appointment', back_populates='stylist')
 
-class Hairstyle(db.Model):
+class MoonPhase(db.Model):
+    __tablename__ = 'moonphases'
+
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(120), nullable=False)
-    moon_phase_id = db.Column(db.Integer, db.ForeignKey('moonphase.id'))
-    image = db.column(db.string)
+    phase = db.Column(db.String, nullable=False)
+    date = db.Column(db.Date, nullable=False)
+    image = db.Column(db.String)
+
+    # Relationships
+    hairstyles = db.relationship('Hairstyle', back_populates='moon_phase')    
+
+    @validates('image')
+    def validate_image(self, key, user_image):
+        if(user_image == ''):
+            raise ValueError('Image cannot be empty string')
+        # # image has to be .png, .jpeg, .jpg
+        # if('jpg' not in user_image and 'jpeg' not in user_image and 'png' not in user_image):
+        #     raise ValueError('Image must be of type jpeg, jpg, or png')
+        return user_image
+
+
+class Hairstyle(db.Model):
+    __tablename__ = 'hairstyles'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String, nullable=False)
+    moon_phase_id = db.Column(db.Integer, db.ForeignKey('moonphases.id'))
+    image = db.Column(db.String)
 
     # Relationships
     appointments = db.relationship('Appointment', back_populates='hairstyle')
@@ -94,36 +125,23 @@ class Hairstyle(db.Model):
         if(user_image == ''):
             raise ValueError('Image cannot be empty string')
         # image has to be .png, .jpeg, .jpg
-        if('jpg' not in user_image and 'jpeg' not in user_image and 'png' not in user_image):
-            raise ValueError('Image must be of type jpeg, jpg, or png')
+        # if('jpg' not in user_image and 'jpeg' not in user_image and 'png' not in user_image):
+        #     raise ValueError('Image must be of type jpeg, jpg, or png')
         return user_image
 
-class MoonPhase(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    phase = db.Column(db.String, nullable=False)
-    date = db.Column(db.Date, nullable=False)
-    image = db.Column(db.string)
-
-    # Relationships
-    hairstyles = db.relationship('Hairstyle', back_populates='moon_phase')    
-
-    @validates('image')
-    def validate_image(self, key, user_image):
-        if(user_image == ''):
-            raise ValueError('Image cannot be empty string')
-        # image has to be .png, .jpeg, .jpg
-        if('jpg' not in user_image and 'jpeg' not in user_image and 'png' not in user_image):
-            raise ValueError('Image must be of type jpeg, jpg, or png')
-        return user_image
 
 class Appointment(db.Model):
+    __tablename__ = 'appointments'
+
     id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.Date, nullable=False)
     # time = db.Column(db.String, nullable=False)
+    created_at = db.Column(db.DateTime, server_default=db.func.now())
+    updated_at = db.Column(db.DateTime, onupdate=db.func.now())
     
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    hairstyle_id = db.Column(db.Integer, db.ForeignKey('hairstyle.id'), nullable=False)
-    stylist_id = db.Column(db.Integer, db.ForeignKey('stylist.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    hairstyle_id = db.Column(db.Integer, db.ForeignKey('hairstyles.id'), nullable=False)
+    stylist_id = db.Column(db.Integer, db.ForeignKey('stylists.id'), nullable=False)
 
     # Relationships
     user = db.relationship('User', back_populates='appointments')

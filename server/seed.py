@@ -11,11 +11,11 @@ from faker import Faker
 from app import app
 from models import db, User, Hairstyle, Stylist, MoonPhase, Appointment
 
-if __name__ == '__main__':
-    fake = Faker()
-    with app.app_context():
-        print("Starting seed...")
-        # Seed code goes here!
+# if __name__ == '__main__':
+#     fake = Faker()
+#     with app.app_context():
+#         print("Starting seed...")
+#         # Seed code goes here!
 
 # Seed data
 def seed_data():
@@ -27,7 +27,7 @@ def seed_data():
         user = User(
             username=fake.user_name(),
             email=fake.email(),
-            password_hash=fake.password(),
+            # password_hash=fake.password(),  # Ensure password_hash is handled in your User model
             birthdate=fake.date_of_birth(minimum_age=18),
         )
         users.append(user)
@@ -87,3 +87,10 @@ def seed_data():
 
     db.session.commit()
     print("Seeding completed!")
+
+if __name__ == '__main__':
+    with app.app_context():
+        print("Starting seed...")
+        seed_data()
+
+      

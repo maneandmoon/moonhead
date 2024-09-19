@@ -136,11 +136,11 @@ class Appointment(db.Model):
             raise ValueError("Appointment date must be in the future.")
         return date
 
-    # @validates('time')
-    # def validate_time(self, key, time):
-    #     if not re.match(r'^\d{2}:\d{2}$', time):
-    #         raise ValueError("Time must be in 'HH:MM' format.")
-    #     return time
+    @validates('time')
+    def validate_time(self, key, time):
+        if not re.match(r'^\d{2}:\d{2}$', time):
+            raise ValueError("Time must be in 'HH:MM' format.")
+        return time
 
 
 

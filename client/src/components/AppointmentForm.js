@@ -11,7 +11,7 @@ import {
   FormTitle 
 } from './styles';
 
-
+// { setSubmitting, setErrors }
 function Appointment() {
 
   const navigate = useNavigate();
@@ -40,7 +40,8 @@ function Appointment() {
     },
 
     validationSchema: AppointmentSchema,
-    onSubmit: (values, { setSubmitting, setErrors }) => {
+
+    onSubmit: (values) => {
       setSubmitting(true);
       fetch("http://127.0.0.1:5555/appointments", {
         method: "POST",

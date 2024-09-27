@@ -19,7 +19,7 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String, unique=True, nullable=False)
     email = db.Column(db.String, unique=True, nullable=False)
-    # password_hash = db.Column(db.String, nullable=False)
+    _password_hash = db.Column(db.String)
     birthdate = db.Column(db.Date, nullable=False)
     # phone_number =
     # zodiac =
@@ -41,21 +41,26 @@ class User(db.Model):
             raise ValueError("Email format is invalid.")
         return email
 
-    # @hybrid_property
-    # def password_hash(self):
-    #     raise AttributeError('password is private')
-    #     # return self._password_hash
+    @hybrid_property
+    def password_hash(self):
+        raise AttributeError('password is private')
+        # return self._password_hash
     
     # @password_hash.setter
     # def password_hash(self, password):
-    #     password_hash = bcrypt.generate_password_hash(
-    #         password.encode('utf-8'))
+    #     password_hash = bcrypt.generate_password_hash(password.encode('utf-8'))
     #     self._password_hash = password_hash.decode('utf-8')
 
     # def authenticate(self, password):
-    #     return bcrypt.check_password_hash(
-    #         self._password_hash, password.encode('utf-8'))
+    #     return bcrypt.check_password_hash(self._password_hash, password.encode('utf-8'))
     
+    @password_hash.setter
+    def password_hash(self, password):
+        self._password_hash = bcrypt.generate_password_hash(password.encode('utf-8')).decode('utf-8')
+
+    def authenticate(self, password):
+        return bcrypt.check_password_hash(self._password_hash, password.encode('utf-8'))
+
     # @validates('password_hash')
     # def validate_password(self, key, password):
     #     if len(password) < 5:
@@ -118,6 +123,7 @@ class Hairstyle(db.Model):
     name = db.Column(db.String, nullable=False)
     moon_phase_id = db.Column(db.Integer, db.ForeignKey('moonphases.id'))
     image = db.Column(db.String)
+    price = db.Column(db.Float, nullable=False)
 
     # Relationships
     appointments = db.relationship('Appointment', back_populates='hairstyle')
@@ -145,6 +151,12 @@ class Hairstyle(db.Model):
         # if('jpg' not in user_image and 'jpeg' not in user_image and 'png' not in user_image):
         #     raise ValueError('Image must be of type jpeg, jpg, or png')
         return user_image
+    
+    @validates('price')
+    def validate_price(self, key, user_price):
+        if user_price < 0:
+            raise ValueError("Price must be a non-negative number.")
+        return user_price
 
 
 class Appointment(db.Model):

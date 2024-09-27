@@ -19,6 +19,26 @@ import Signup from "./Signup";
 import User from "./User";
 
 function App() {
+    const [appointments, setAppointments] = useState([]);
+    const [users, setUsers] = useState([]);
+
+    useEffect(() => {
+      fetch("http://127.0.0.1:5555/appointments")
+        .then(res => {
+          if (res.ok) {
+            return res.json();
+          } else {
+            throw new Error("Failed to fetch appointments");
+          }
+        })
+        .then(data => setAppointments(data))
+        .catch(err => console.error("Unable to reach the server:", err));
+    }, []);
+
+
+    const addAppointment = (appointment) =>
+        setAppointments((current) => [...current, appointment]);
+
   // const [isLoggedIn, setIsLoggedIn] = useState(false);
   // const navigate = useNavigate();
 
@@ -46,15 +66,17 @@ function App() {
       {/* <div className="app">
       <NavBar logout={logout}/>
       <Outlet context={login}/> */}
+
       <NavBar />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/moonphase" element={<MoonPhasePage />} />
-        <Route path="/appointment" element={<Appointment />} />
+        {/* <Route path="/appointment" element={<Appointment />} />  */}
+        {/* addAppointment={addAppointment} */}
         <Route path="/stylist" element={<Stylist />} />
         <Route path="/hairstyle" element={<Hairstyle />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} /> 
+        {/* <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />  */}
         <Route path="/user" element={<User />} />
         {/* <Route path="/search" element={<Search />} /> */}
       </Routes>

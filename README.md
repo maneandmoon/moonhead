@@ -58,6 +58,36 @@ Activate the virtual environment:
 
 		pipenv shell
 
+#### Setup Environment Variables and API Key
+
+##### API Key 
+
+1. Obtain an API Key from weatherapi.com by signing up for a free account. Follow the prompt on screen and login. 
+2. An API key will be provided. Use this key as a request parameter through an API.
+		key=<YOUR API KEY>
+3. Base URL for request to WeatherAPI.com is:
+		Base URL: "http://api.weatherapi.com/v1"
+4. URL for moon phase request is:
+		"http://api.weatherapi.com/v1/astronomy.json"
+5. Required request parameters are API key (key); query (q) parameter is set to Chicago as the location but update it as needed depending on the user's location, and date time (dt).
+
+##### Environment Creation
+
+1. Create a `.env` file in the project root directory.
+2. Add your API key to the `.env` file:
+
+		API_KEY=your_api_key_here
+
+3. Install the required packages:
+
+		pip install python-dotenv
+
+4. Run the application:
+
+		python app.py
+
+By following these steps, we ensure that API keys and sensitive information remain private and secure, even in a private GitHub repository.
+
 #### Database Setup
 
 Navigate to the data directory:
@@ -77,6 +107,7 @@ Alternatively, you can create a migration environment by navigating to cd server
 		flask db upgrade
 		
 		python seed.py
+
 
 #### Running the Application
 

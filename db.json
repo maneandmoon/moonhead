@@ -1,0 +1,159 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "username": "user1",
+      "email": "user1@example.com",
+      "birthdate": "1990-01-01"
+    },
+    {
+      "id": 2,
+      "username": "user2",
+      "email": "user2@example.com",
+      "birthdate": "1985-05-12"
+    }
+  ],
+  "stylists": [
+    {
+      "id": 1,
+      "name": "Stylist A",
+      "specialty": "Coloring"
+    },
+    {
+      "id": 2,
+      "name": "Stylist B",
+      "specialty": "Cutting"
+    },
+    {
+      "id": 3,
+      "name": "Stylist C",
+      "specialty": "Styling"
+    }
+  ],
+  "hairstyles": [
+    {
+      "id": 1,
+      "name": "Bob Cut",
+      "moon_phase_id": 1,
+      "image": "https://example.com/images/bob-cut.jpg"
+    },
+    {
+      "id": 2,
+      "name": "Pixie Cut",
+      "moon_phase_id": 2,
+      "image": "https://example.com/images/pixie-cut.jpg"
+    },
+    {
+      "id": 3,
+      "name": "Lunar Waves",
+      "moon_phase_id": 3,
+      "image": "https://example.com/images/lunar-waves.jpg"
+    },
+    {
+      "id": 4,
+      "name": "Cosmic Braids",
+      "moon_phase_id": 4,
+      "image": "https://example.com/images/cosmic-braids.jpg"
+    },
+    {
+      "id": 5,
+      "name": "Zodiac Curls",
+      "moon_phase_id": 5,
+      "image": "https://example.com/images/zodiac-curls.jpg"
+    },
+    {
+      "id": 6,
+      "name": "Starry Ponytail",
+      "moon_phase_id": 6,
+      "image": "https://example.com/images/starry-ponytail.jpg"
+    },
+    {
+      "id": 7,
+      "name": "Galaxy Bun",
+      "moon_phase_id": 7,
+      "image": "https://example.com/images/galaxy-bun.jpg"
+    },
+    {
+      "id": 8,
+      "name": "Solar Locks",
+      "moon_phase_id": 8,
+      "image": "https://example.com/images/solar-locks.jpg"
+    }
+  ],
+  "moonphases": [
+    {
+      "id": 1,
+      "phase": "New Moon",
+      "date": "2024-09-01",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/6/60/New_Moon.jpg"
+    },
+    {
+      "id": 2,
+      "phase": "Waxing Crescent",
+      "date": "2024-09-03",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/1/1f/Waxing_Crescent_Moon.jpg"
+    },
+    {
+      "id": 3,
+      "phase": "First Quarter",
+      "date": "2024-09-07",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/a/af/First_Quarter_Moon.jpg"
+    },
+    {
+      "id": 4,
+      "phase": "Waxing Gibbous",
+      "date": "2024-09-10",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/d/d1/Waxing_Gibbous_Moon.jpg"
+    },
+    {
+      "id": 5,
+      "phase": "Full Moon",
+      "date": "2024-09-15",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/3/3b/Full_Moon.jpg"
+    },
+    {
+      "id": 6,
+      "phase": "Waning Gibbous",
+      "date": "2024-09-17",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/a/a3/Waning_Gibbous_Moon.jpg"
+    },
+    {
+      "id": 7,
+      "phase": "Last Quarter",
+      "date": "2024-09-21",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/0/0f/Last_Quarter_Moon.jpg"
+    },
+    {
+      "id": 8,
+      "phase": "Waning Crescent",
+      "date": "2024-09-25",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/2/2f/Waning_Crescent_Moon.jpg"
+    }
+  ],
+  "appointments": [
+    {
+      "id": 1,
+      "date": "2024-09-10",
+      "time": "10:00",
+      "user_id": 1,
+      "hairstyle_id": 1,
+      "stylist_id": 1
+    },
+    {
+      "id": 2,
+      "date": "2024-09-12",
+      "time": "14:30",
+      "user_id": 2,
+      "hairstyle_id": 2,
+      "stylist_id": 2
+    },
+    {
+      "id": 3,
+      "date": "2024-09-13",
+      "time": "12:00",
+      "user_id": 1,
+      "hairstyle_id": 5,
+      "stylist_id": 3
+    }
+  ]
+}

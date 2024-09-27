@@ -8,7 +8,7 @@ from datetime import datetime, timedelta
 from faker import Faker
 
 # Local imports
-from app import app
+from app import app, MoonPhaseResource
 from models import db, User, Hairstyle, Stylist, MoonPhase, Appointment
 
 # if __name__ == '__main__':
@@ -48,14 +48,30 @@ def seed_data():
     db.session.commit()
 
     # Create moon phases
+    # moon_phases = []
+    # for _ in range(12):
+    #     phase_date = datetime.now() + timedelta(days=_ * 28)  # Approximate moon cycle
+    #     moon_phase = MoonPhase(
+    #         phase=rc(['New Moon', 'Waxing Crescent', 'First Quarter', 'Waxing Gibbous', 
+    #                    'Full Moon', 'Waning Gibbous', 'Last Quarter', 'Waning Crescent']),
+    #         date=phase_date.date(),
+    #         image=fake.image_url()
+    #     )
+    #     moon_phases.append(moon_phase)
+    #     db.session.add(moon_phase)
+
+    # db.session.commit()
+
+    # Create moon phases
     moon_phases = []
     for _ in range(12):
-        phase_date = datetime.now() + timedelta(days=_ * 28)  # Approximate moon cycle
+        phase_date = datetime.now() + timedelta(days=_ * 28)
+        moon_phase_name = rc(['New Moon', 'Waxing Crescent', 'First Quarter', 'Waxing Gibbous', 
+                               'Full Moon', 'Waning Gibbous', 'Last Quarter', 'Waning Crescent'])
         moon_phase = MoonPhase(
-            phase=rc(['New Moon', 'Waxing Crescent', 'First Quarter', 'Waxing Gibbous', 
-                       'Full Moon', 'Waning Gibbous', 'Last Quarter', 'Waning Crescent']),
+            phase=moon_phase_name,
             date=phase_date.date(),
-            image=fake.image_url()
+            image=MoonPhaseResource().get_moon_image(moon_phase_name)  # Fetch correct image
         )
         moon_phases.append(moon_phase)
         db.session.add(moon_phase)
@@ -76,15 +92,21 @@ def seed_data():
     db.session.commit()
 
     # Create appointments
+    appointments = []
     for _ in range(50):
+        appointment_time = '20:20'  # Example time string
+        appointment_time_obj = datetime.strptime(appointment_time, '%H:%M').time()  # Convert to time object
+        
         appointment = Appointment(
             date=fake.date_between(start_date='today', end_date='+30d'),
+            time=appointment_time_obj,
             user_id=rc(users).id,
             hairstyle_id=rc(hairstyles).id,
             stylist_id=rc(stylists).id
         )
-        db.session.add(appointment)
-
+        appointments.append(appointment)
+    
+    db.session.add(appointment)
     db.session.commit()
     print("Seeding completed!")
 

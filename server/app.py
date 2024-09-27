@@ -1,25 +1,47 @@
 #!/usr/bin/env python3
 
 # Standard library imports
+from dotenv import load_dotenv
+import os
 
 # Remote library imports
-from flask import request, make_response
+from flask import request, make_response, jsonify
 from flask_restful import Resource
-from datetime import datetime
+from datetime import datetime, timedelta
+from sqlalchemy.exc import IntegrityError
+import requests
 
 # Local imports
 from config import app, db, api
+
 # Add your model imports
-from models import db, User, Hairstyle, Stylist, Appointment
-# ,MoonPhase
+from models import db, User, Hairstyle, Stylist, Appointment, MoonPhase
+
+# Load environment variables from .env file
+load_dotenv()  
+
+API_KEY = os.getenv('API_KEY')
 
 # Views go here!
 
 @app.route('/')
 def index():
-    return '<h1>Project Server</h1>'
+    return '<h1>Project MoonHead</h1>'
 
 # User
+
+# 127.0.0.1 - - [26/Sep/2024 12:40:58] "GET /users HTTP/1.1" 200 -
+# /home/lindata/Development/code/phase-5/moonhead/server/app.py:63: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+#   user = User.query.get(id)
+# 127.0.0.1 - - [26/Sep/2024 12:41:08] "GET /users/1 HTTP/1.1" 200 -
+# Type of user_birthdate: <class 'datetime.datetime'>
+# 127.0.0.1 - - [26/Sep/2024 12:42:17] "POST /users HTTP/1.1" 201 -
+# /home/lindata/Development/code/phase-5/moonhead/server/app.py:74: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+#   user = User.query.get(id)
+# Type of user_birthdate: <class 'datetime.date'>
+# 127.0.0.1 - - [26/Sep/2024 12:43:02] "PATCH /users/182 HTTP/1.1" 200 -
+
+# ask rachel about this warning--should update to db.session.get(User, id) for patch and getting single user? 
 
 class UserList(Resource):
     def get(self):
@@ -43,9 +65,19 @@ class UserList(Resource):
                 
 api.add_resource(UserList, '/users')    
 
+# {
+#   "username": "newusertest63",
+#   "email": "newusertest_63@example.com",
+#   "birthdate": "1982-06-21"
+# }
+
 class UserResource(Resource):
     def get(self, id):
-        user = User.query.get(id)
+        # user = User.query.get(id)
+
+        # user = User.query.filter_by(id=id).first()
+        user = db.session.get(User, id)  # Use Session.get() instead of Query.get()
+        
         if user is None:
             return make_response({'message': 'User not found'}, 404)
         return make_response({
@@ -56,7 +88,10 @@ class UserResource(Resource):
             }, 200)
 
     def patch(self, id):
-        user = User.query.get(id)
+        # user = User.query.get(id)
+        # user = User.query.filter_by(id=id).first()
+        user = db.session.get(User, id)  # Use Session.get() instead of Query.get()
+
         if user is None:
             return make_response({'message': 'User not found'}, 404)
         data = request.get_json()
@@ -81,7 +116,14 @@ class StylistList(Resource):
     def get(self):
         stylists = Stylist.query.all()
         return make_response(
-            [{'id': stylist.id, 'name': stylist.name} for stylist in stylists], 200)
+            [{'id': stylist.id, 'name': stylist.name, 'specialty': stylist.specialty} for stylist in stylists], 200)
+    
+    def post(self):
+        data = request.get_json()
+        new_stylist = Stylist(name=data['name'], specialty=data.get('specialty'))
+        db.session.add(new_stylist)
+        db.session.commit()
+        return make_response({'id': new_stylist.id}, 201)
 
 api.add_resource(StylistList, '/stylists')
   
@@ -91,13 +133,6 @@ class StylistResource(Resource):
         if stylist is None:
             return make_response({'message': 'Stylist not found'}, 404)
         return make_response({'id': stylist.id, 'name': stylist.name, 'specialty': stylist.specialty}, 200)
-
-    def post(self):
-        data = request.get_json()
-        new_stylist = Stylist(name=data['name'], specialty=data.get('specialty'))
-        db.session.add(new_stylist)
-        db.session.commit()
-        return make_response({'id': new_stylist.id}, 201)
 
     def patch(self, id):
         stylist = Stylist.query.get(id)
@@ -127,6 +162,13 @@ class HairstyleList(Resource):
         return make_response(
             [{'id': hairstyle.id, 'name': hairstyle.name} for hairstyle in hairstyles], 200)
     
+    def post(self):
+        data = request.get_json()
+        new_hairstyle = Hairstyle(name=data['name'], image=data.get('image'))
+        db.session.add(new_hairstyle)
+        db.session.commit()
+        return make_response({'id': new_hairstyle.id}, 201)
+    
 api.add_resource(HairstyleList, '/hairstyles')
 
 class HairstyleResource(Resource):
@@ -135,13 +177,6 @@ class HairstyleResource(Resource):
         if hairstyle is None:
             return make_response({'message': 'Hairstyle not found'}, 404)
         return make_response({'id': hairstyle.id, 'name': hairstyle.name}, 200)
-
-    def post(self):
-        data = request.get_json()
-        new_hairstyle = Hairstyle(name=data['name'], image=data.get('image'))
-        db.session.add(new_hairstyle)
-        db.session.commit()
-        return make_response({'id': new_hairstyle.id}, 201)
 
     def patch(self, id):
         hairstyle = Hairstyle.query.get(id)
@@ -165,13 +200,71 @@ api.add_resource(HairstyleResource, '/hairstyles/<int:id>')
   
 # Appointment
 
+@app.route('/appointments', methods=['POST'])
+def create_appointment():
+    data = request.json
+
+    date_str = data.get('date')
+    time_str = data.get('time')
+    user_id = data.get('user_id')
+    hairstyle_id = data.get('hairstyle_id')
+    stylist_id = data.get('stylist_id')
+
+    if not all([date_str, time_str, user_id, hairstyle_id, stylist_id]):
+        return make_response(jsonify({"error": "All fields are required."}), 400)
+
+    # Combine date and time into a single datetime object
+    try:
+        appointment_date = datetime.strptime(date_str, '%Y-%m-%d').date()
+        appointment_time = datetime.strptime(time_str, '%H:%M').time()
+    except ValueError:
+        return make_response(jsonify({"error": "Invalid date format. Use 'YYYY-MM-DD' for date and 'HH:MM' for time."}), 400)
+
+    # Check for overlapping appointments
+    existing_appointment = (
+        db.session.query(Appointment)
+        .filter(
+            Appointment.stylist_id == stylist_id,
+            Appointment.date == appointment_date,
+            Appointment.time == appointment_time
+        )
+        .first()
+    )
+
+    if existing_appointment:
+        return make_response(jsonify({"error": "This stylist already has an appointment at this time."}), 400)
+
+    new_appointment = Appointment(
+        date=appointment_date,
+        time=appointment_time,
+        user_id=user_id,
+        hairstyle_id=hairstyle_id,
+        stylist_id=stylist_id
+    )
+
+    try:
+        db.session.add(new_appointment)
+        db.session.commit()
+        return make_response(jsonify({"message": "Appointment created successfully.", "id": new_appointment.id}), 201)
+    except IntegrityError:
+        db.session.rollback()
+        return make_response(jsonify({"error": "Could not create appointment."}), 500)
+
 class AppointmentList(Resource):
     def get(self):
         appointments = Appointment.query.all()
         return make_response(
-            [{'id': appointment.id, 'date': appointment.date, 'time': appointment.time} for appointment in appointments], 200
+            [{
+                'id': appointment.id, 
+                'date': appointment.date.strftime('%Y-%m-%d'), 
+                'time': appointment.time.strftime("%H:%M"),  # Convert time to string
+                'user_id': appointment.user_id,
+                'hairstyle_id': appointment.hairstyle_id,
+                'stylist_id': appointment.stylist_id,
+                'updated_at': appointment.updated_at.isoformat() if appointment.updated_at else None
+                } for appointment in appointments], 200
         )
-
+    
 api.add_resource(AppointmentList, '/appointments')
    
 class AppointmentResource(Resource):
@@ -181,24 +274,12 @@ class AppointmentResource(Resource):
             return make_response({'message': 'Appointment not found'}, 404)
         return make_response({
             'id': appointment.id,
-            'date': appointment.date,
-            'time': appointment.time,
+            'date': appointment.date.strftime('%Y-%m-%d'),
+            'time': appointment.time.strftime("%H:%M"),  # Convert time to string,
             'user_id': appointment.user_id,
             'hairstyle_id': appointment.hairstyle_id,
             'stylist_id': appointment.stylist_id}, 200)
 
-    def post(self):
-        data = request.get_json()
-        new_appointment = Appointment(
-            date=data['date'],
-            time=data['time'],
-            user_id=data['user_id'],
-            hairstyle_id=data['hairstyle_id'],
-            stylist_id=data['stylist_id']
-        )
-        db.session.add(new_appointment)
-        db.session.commit()
-        return make_response({'id': new_appointment.id}, 201)
 
     def patch(self, id):
         appointment = Appointment.query.get(id)
@@ -222,30 +303,149 @@ api.add_resource(AppointmentResource, '/appointments/<int:id>')
 
 # MoonPhase 
 
-# GET /moon-phase: Fetch the current moon phase
+class CurrentMoonPhaseResource(Resource):
+    def get(self):
+        url = "http://api.weatherapi.com/v1/astronomy.json"
+        params = {
+            "key": "bab7feb848584ba19c3160724242009", 
+            # API_KEY -- if wanted to keep API private--in .env
+            "q": "Chicago",
+            "dt": datetime.now().strftime('%Y-%m-%d')  # Use today's date
+        }
 
-# curl --request GET \
-# 	--url 'https://moon-phase.p.rapidapi.com/calendar?format=html' \
-# 	--header 'x-rapidapi-host: moon-phase.p.rapidapi.com' \
-# 	--header 'x-rapidapi-key: Sign Up for Key'
-# need to signup for key, add key to gitignore??
-# add a try: and error status? will work on 9/19-9/20
-# calendar format in html...change to json? format=json
-# url = 'https://moon-phase.p.rapidapi.com/calendar?format=json'
+        try:
+            response = requests.get(url, params=params)
+            print(f"Response Status Code: {response.status_code}")
+            print(f"Response Text: {response.text}")
 
-# class MoonPhaseResource(Resource):
-#     def get(self):
-#         moon_phase_data = response.json()
-#         url = 'https://moon-phase.p.rapidapi.com/calendar?format=html'
-#         headers = {
-#             'x-rapidapi-host': 'moon-phase.p.rapidapi.com',
-#             'x-rapidapi-key': 'Sign Up for Key'
-#         }  
+            response.raise_for_status()
+            data = response.json()
 
-#         return make_response(moon_phase_data, 200)
+            moon_phase_data = {
+                'phase': data['astronomy']['astro']['moon_phase'],
+                'date': None,  # Initialize date as None
+                'image': self.get_moon_image
+                # (data['astronomy']['astro']['moon_phase'])
+            }
 
-# api.add_resource(MoonPhaseResource, '/moon-phase')
+            if moon_phase_data['phase'] and data['astronomy']['astro']['moonrise'] != "No moonrise":
+                # Combine the current date with the moonrise time
+                moonrise_time_str = data['astronomy']['astro']['moonrise']
+                current_date = datetime.now().date()  # Get current date
+                moonrise_time = datetime.strptime(moonrise_time_str, '%I:%M %p')  # Parse moonrise time
+                
+                # Combine date and time into a single datetime object
+                full_moonrise_datetime = datetime.combine(current_date, moonrise_time.time())
+                moon_phase_data['date'] = full_moonrise_datetime.strftime('%Y-%m-%d %H:%M:%S')  # Format as "year-month-day hour:minute:second"
+
+                # Save to database
+                new_moon_phase = MoonPhase(phase=moon_phase_data['phase'], date=full_moonrise_datetime, image=moon_phase_data['image'])
+                db.session.add(new_moon_phase)
+                db.session.commit()
+
+                return make_response(moon_phase_data, 200)
+            else:
+                print("No valid moonrise data to save.")
+                moon_phase_data['message'] = 'No valid moonrise data found.'
+                return make_response(moon_phase_data, 200)  # Return the moon_phase_data with a message
+
+        except requests.exceptions.HTTPError as http_err:
+            print(f"HTTP error occurred: {http_err}")
+            print(f"Response Text: {response.text}")
+            return make_response({'error': f"HTTP error occurred: {http_err}"}, 400)
+
+        except requests.exceptions.RequestException as req_err:
+            print(f"Request exception occurred: {req_err}")
+            return make_response({'error': f"Request exception occurred: {req_err}"}, 500)
+
+        except Exception as e:
+            print(f"An unexpected error occurred: {e}")
+            return make_response({'error': str(e)}, 500)
+
+    def get_moon_image(self, phase):
+        images = {
+            'New Moon': 'https://images-assets.nasa.gov/image/GSFC_20171208_Archive_e000872/GSFC_20171208_Archive_e000872~small.jpg',
+            'Waxing Crescent': 'https://images-assets.nasa.gov/image/GSFC_20171208_Archive_e000865/GSFC_20171208_Archive_e000865~medium.jpg',
+            'First Quarter': 'https://images-assets.nasa.gov/image/GSFC_20171208_Archive_e001863/GSFC_20171208_Archive_e001863~medium.jpg',
+            'Waxing Gibbous': 'https://images-assets.nasa.gov/image/GSFC_20171208_Archive_e000867/GSFC_20171208_Archive_e000867~small.jpg',
+            'Full Moon': 'https://images-assets.nasa.gov/image/GSFC_20171208_Archive_e000868/GSFC_20171208_Archive_e000868~medium.jpg',
+            'Waning Gibbous': 'https://images-assets.nasa.gov/image/GSFC_20171208_Archive_e000868/GSFC_20171208_Archive_e000868~medium.jpg',
+            'Last Quarter': 'https://images-assets.nasa.gov/image/iss066e152090/iss066e152090~medium.jpg',
+            'Waning Crescent': 'https://images-assets.nasa.gov/image/GSFC_20171208_Archive_e000871/GSFC_20171208_Archive_e000871~small.jpg',
+        }
+        return images.get(phase, '')
+
+api.add_resource(CurrentMoonPhaseResource, '/moon-phase')
+
+
+class MoonPhaseResource(Resource):
+    def get(self):
+        url = "http://api.weatherapi.com/v1/astronomy.json"
+        params = {
+            "key": "bab7feb848584ba19c3160724242009",
+            # API_KEY -- if wanted to keep API private--in .env
+            "q": "Chicago",
+        }
+
+        month_phases = []  # To store moon phase data for the month
+        current_date = datetime.now()
+        start_of_month = current_date.replace(day=1)
+        # Get the last day of the current month
+        next_month = start_of_month.replace(month=start_of_month.month + 1) if start_of_month.month < 12 else start_of_month.replace(year=start_of_month.year + 1, month=1)
+        end_of_month = (next_month - timedelta(days=1)).day
+
+        for day in range(1, end_of_month + 1):
+            params["dt"] = start_of_month.replace(day=day).strftime('%Y-%m-%d')  # Set date for each day in the month
+
+            try:
+                response = requests.get(url, params=params)
+                response.raise_for_status()
+                data = response.json()
+
+                moon_phase = data['astronomy']['astro']['moon_phase']
+                moonrise_time_str = data['astronomy']['astro']['moonrise']
+
+                if moon_phase and moonrise_time_str != "No moonrise":
+                    moonrise_time = datetime.strptime(moonrise_time_str, '%I:%M %p')  # Parse moonrise time
+                    full_moonrise_datetime = datetime.combine(start_of_month.replace(day=day).date(), moonrise_time.time())
+
+                    moon_phase_data = {
+                        'phase': moon_phase,
+                        'date': full_moonrise_datetime.strftime('%Y-%m-%d %H:%M:%S'),  # Format as "year-month-day hour:minute:second"
+                        'image': self.get_moon_image(moon_phase),
+                    }
+
+                    # Save to database if needed
+                    new_moon_phase = MoonPhase(phase=moon_phase_data['phase'], date=full_moonrise_datetime, image=moon_phase_data['image'])
+                    db.session.add(new_moon_phase)
+                    month_phases.append(moon_phase_data)
+
+            except requests.exceptions.HTTPError as http_err:
+                print(f"HTTP error occurred for date {start_of_month.replace(day=day).strftime('%Y-%m-%d')}: {http_err}")
+            except Exception as e:
+                print(f"An unexpected error occurred for date {start_of_month.replace(day=day).strftime('%Y-%m-%d')}: {e}")
+
+        db.session.commit()  # Commit all new moon phases after the loop
+
+        return make_response(month_phases, 200)  # Return all moon phase data for the month
+    
+
+    def get_moon_image(self, phase):
+        images = {
+            'New Moon': 'https://images-assets.nasa.gov/image/GSFC_20171208_Archive_e000872/GSFC_20171208_Archive_e000872~small.jpg',
+            'Waxing Crescent': 'https://images-assets.nasa.gov/image/GSFC_20171208_Archive_e000865/GSFC_20171208_Archive_e000865~medium.jpg',
+            'First Quarter': 'https://images-assets.nasa.gov/image/GSFC_20171208_Archive_e001863/GSFC_20171208_Archive_e001863~medium.jpg',
+            'Waxing Gibbous': 'https://images-assets.nasa.gov/image/GSFC_20171208_Archive_e000867/GSFC_20171208_Archive_e000867~small.jpg',
+            'Full Moon': 'https://images-assets.nasa.gov/image/GSFC_20171208_Archive_e000868/GSFC_20171208_Archive_e000868~medium.jpg',
+            'Waning Gibbous': 'https://images-assets.nasa.gov/image/GSFC_20171208_Archive_e000868/GSFC_20171208_Archive_e000868~medium.jpg',
+            'Last Quarter': 'https://images-assets.nasa.gov/image/iss066e152090/iss066e152090~medium.jpg',
+            'Waning Crescent': 'https://images-assets.nasa.gov/image/GSFC_20171208_Archive_e000871/GSFC_20171208_Archive_e000871~small.jpg',
+
+
+        }
+        return images.get(phase, '')
+
+api.add_resource(MoonPhaseResource, '/moon-phases')  
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
-

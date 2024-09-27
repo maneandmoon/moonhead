@@ -1,0 +1,63 @@
+.home-container {
+    padding: 20px;
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    color: #333;
+  }
+  
+  .intro {
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .intro h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+  }
+  
+  .moon-phase-section,
+  .hairstyle-options,
+  .appointment-section {
+    background-color: #f9f9f9;
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .moon-phase-section h2,
+  .hairstyle-options h2,
+  .appointment-section h2 {
+    font-size: 1.8rem;
+    color: #4a4a4a;
+  }
+  
+  .moon-phase-section p,
+  .hairstyle-options p,
+  .appointment-section p {
+    margin-bottom: 10px;
+  }
+  
+  ul {
+    list-style-type: disc;
+    padding-left: 20px;
+  }
+  
+  ul li {
+    margin-bottom: 8px;
+  }
+  
+  .book-button {
+    background-color: #333;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.1rem;
+  }
+  
+  .book-button:hover {
+    background-color: #555;
+  }
+  

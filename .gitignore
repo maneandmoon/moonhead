@@ -64,3 +64,6 @@ __pycache__
 instance
 .vscode
 package-lock.json
+
+# to keep API key private
+.env

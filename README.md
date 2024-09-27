@@ -64,12 +64,18 @@ Activate the virtual environment:
 
 1. Obtain an API Key from weatherapi.com by signing up for a free account. Follow the prompt on screen and login. 
 2. An API key will be provided. Use this key as a request parameter through an API.
+		
 		key=<YOUR API KEY>
+
 3. Base URL for request to WeatherAPI.com is:
+		
 		Base URL: "http://api.weatherapi.com/v1"
+
 4. URL for moon phase request is:
+		
 		"http://api.weatherapi.com/v1/astronomy.json"
-5. Required request parameters are API key (key); query (q) parameter is set to Chicago as the location but update it as needed depending on the user's location, and date time (dt).
+
+5. Required request parameters are API key (key); query (q) (parameter is set to Chicago as the location but update it as needed depending on the user's location); and date time (dt).
 
 ##### Environment Creation
 

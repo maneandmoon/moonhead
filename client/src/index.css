@@ -5,3 +5,10 @@
   --text: hsla(0, 0%, 100%, 0.88);
 }
 
+/* Tailwind CSS directives */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+

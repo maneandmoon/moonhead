@@ -1,97 +1,72 @@
-import React from "react";
-import { useFormik } from "formik";
-import * as yup from "yup";
-import { 
-    FormContainer, 
-    StyledForm, 
-    StyledInput, 
-    StyledButton, 
-    FormTitle, 
-    ErrorMessage, 
-    BackgroundWrapper 
-  } from './styles';
-  
-const LoginSchema = yup.object().shape({
-    username: yup.string().required("Username is required"),
-    password: yup.string().required("Password is required"),
-});
+import React, { useState } from 'react';
+import { useFormik } from 'formik';
+import * as yup from 'yup';
 
-function LoginForm({ onLogin }) {
+const LoginForm = ({ onLogin }) => {
+  const [error, setError] = useState(null);
+
   const formik = useFormik({
     initialValues: {
-      username: "",
-      password: "",
+      username: '',
+      password: '',
     },
-    validationSchema: LoginSchema,
-    onSubmit: (values, { setSubmitting, setErrors }) => {
-      setSubmitting(true);
-      fetch("/login", {
-        method: "POST",
+    validationSchema: yup.object({
+      username: yup.string().required('Required'),
+      password: yup.string().required('Required'),
+    }),
+    onSubmit: (values) => {
+      fetch('/login', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(values),
       })
-        .then((r) => {
-          setSubmitting(false);
-          if (r.ok) {
-            r.json().then((user) => onLogin(user));
-          } else {
-            r.json().then((err) => setErrors({ api: err.errors }));
-          }
-        });
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Login failed');
+        }
+        return response.json();
+      })
+      .then((user) => {
+        onLogin(user);
+      })
+      .catch((err) => {
+        setError(err.message);
+      });
     },
   });
 
   return (
-    <BackgroundWrapper>
-      <FormContainer>
-        <FormTitle>Login</FormTitle>
-        <StyledForm onSubmit={formik.handleSubmit}>
-      <StyledForm>
-        {/* <Label htmlFor="username">Username</Label> */}
-        <StyledInput
+    <form onSubmit={formik.handleSubmit} style={{ marginBottom: '16px' }}>
+      <div>
+        <input
           type="text"
           name="username"
-          autoComplete="off"
           onChange={formik.handleChange}
           value={formik.values.username}
+          placeholder="Username"
+          style={{ width: '100%', padding: '8px', margin: '4px 0' }}
         />
-        {formik.errors.username && formik.touched.username ? (
-          <ErrorMessage>{formik.errors.username}</ErrorMessage>
-        ) : null}
-      </StyledForm>
-
-      <StyledForm>
-        {/* <Label htmlFor="password">Password</Label> */}
-        <StyledInput
+        {formik.errors.username && <div style={{ color: 'red' }}>{formik.errors.username}</div>}
+      </div>
+      <div>
+        <input
           type="password"
           name="password"
-          autoComplete="current-password"
           onChange={formik.handleChange}
           value={formik.values.password}
+          placeholder="Password"
+          style={{ width: '100%', padding: '8px', margin: '4px 0' }}
         />
-        {formik.errors.password && formik.touched.password ? (
-          <ErrorMessage>{formik.errors.password}</ErrorMessage>
-        ) : null}
-      </StyledForm>
-
-      <StyledForm>
-        <StyledButton variant="fill" color="primary" type="submit" disabled={formik.isSubmitting}>
-          {formik.isSubmitting ? "Loading..." : "Login"}
-        </StyledButton>
-      </StyledForm>
-
-      <StyledForm>
-        {formik.errors.api && formik.errors.api.map((err, index) => (
-          <ErrorMessage key={index}>{err}</ErrorMessage>
-        ))}
-      </StyledForm>
-
-      </StyledForm>
-      </FormContainer>
-    </BackgroundWrapper>
+        {formik.errors.password && <div style={{ color: 'red' }}>{formik.errors.password}</div>}
+      </div>
+      {error && <div style={{ color: 'red' }}>{error}</div>}
+      <button type="submit" style={{ padding: '10px 15px', color: '#fff', backgroundColor: '#D1782E', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>
+        Log In
+      </button>
+    </form>
   );
-}
+};
 
 export default LoginForm;

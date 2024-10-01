@@ -35,7 +35,7 @@ function Home() {
       <section className="appointment-section">
         <h2>Book Your Appointment</h2>
         <p>Ready to transform your look? Book an appointment with one of our stylists and let Moonhead guide your next hairstyle.</p>
-        <Link to="/appointment">
+        <Link to="/appointments/new">
           <button className="book-button">Book Now</button>
         </Link>
       </section>

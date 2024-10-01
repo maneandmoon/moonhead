@@ -10,11 +10,17 @@ function HairstyleCard({ hairstyle }) {
         padding: "10px",
         width: "300px",
         boxShadow: "0 2px 5px rgba(0,0,0,0.2)",
+        textAlign: "center"
       }}
     >
       <h3>{hairstyle.name}</h3>
-      <h3>{hairstyle.image}</h3>
-    {/* <p>{user.appointment || 'No appointment available'}</p> */}
+      <img
+        src={hairstyle.image || "https://smd-cms.nasa.gov/wp-content/uploads/2023/08/total-eclipse.png"} 
+        alt={hairstyle.name}
+        style={{ width: "100%", borderRadius: "5px" }}
+      />
+      <h4 style={{ margin: "10px 0" }}>Price: ${hairstyle.price}</h4>
+ 
     </li>
   );
 }

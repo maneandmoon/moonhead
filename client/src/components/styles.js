@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 
-// Colors based on moon phases and hair themes
 const colors = {
   newMoon: '#0d0d0d',        // dark, mysterious (new moon)
   fullMoon: '#f5f3ce',       // bright, full moon color

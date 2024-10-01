@@ -1,7 +1,11 @@
 import App from "./components/App";
 import Home from './components/Home';
 import User from './components/User';
-import Appointment from './components/Appointment';
+import Stylist from'./components/Stylist';
+import AppointmentList from './components/AppointmentList';
+import AppointmentForm from './components/AppointmentForm';
+import AppointmentDetail from './components/AppointmentDetail';
+import EditAppointmentPage from "./components/EditAppointmentPage";
 import Signup from './components/Signup';
 import Login from './components/Login';
 import Hairstyle from './components/Hairstyle';
@@ -16,19 +20,31 @@ const routes = [
         element: <Home />
     },
     {
-        path: "/user",
+        path: "/users",
         element: <User />
     },
     {
-        path: "/appointment",
-        element: <Appointment />
+        path: "/appointments",
+        element: <AppointmentList /> 
     },
     {
-        path: "/hairstyle",
+        path: "/appointments/new",
+        element: <AppointmentForm />
+    },
+    {
+        path: "/appointments/:id", 
+        element: <AppointmentDetail />
+    },
+    {
+        path: "/appointments/edit/:id", 
+        element: <EditAppointmentPage updateAppointment={updateAppointment} />
+      },
+    {
+        path: "/hairstyles",
         element: <Hairstyle />
     },    
     {
-        path: "/stylist",
+        path: "/stylists",
         element: <Stylist />
     },  
     {
@@ -40,7 +56,7 @@ const routes = [
         element: <Signup />
     },
     {
-        path: "/moonphase",
+        path: "/moon-phases",
         element: <MoonPhasePage />
     }]
     }

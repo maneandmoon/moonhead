@@ -1,62 +1,40 @@
-import { useState } from "react";
-import styled from "styled-components";
-import LoginForm from "./LoginForm";
-import SignupForm from "./SignupForm";
-import { StyledButton } from "./styles";
+import React, { useState } from 'react';
+import LoginForm from './LoginForm';
+import SignupForm from './SignupForm';
 
 function Login({ onLogin }) {
   const [showLogin, setShowLogin] = useState(true);
-  const [user, setUser] = useState(null);
-
-    if (!user) return <Login onLogin={setUser} />;
 
   return (
-    <Wrapper>
-      <Logo>Projectify</Logo>
+    <div style={{ maxWidth: "500px", margin: "40px auto", padding: "16px" }}>
+      <h1 style={{ fontFamily: "Sora, monospace", fontSize: "3rem", color: "#D1782E", margin: "8px 0 16px" }}>
+        Moonhead
+      </h1>
       {showLogin ? (
         <>
           <LoginForm onLogin={onLogin} />
-          <Divider />
+          <hr style={{ border: "none", borderBottom: "1px solid #ccc", margin: "16px 0" }} />
           <p>
             Don't have an account? &nbsp;
-            <StyledButton color="secondary" onClick={() => setShowLogin(false)}>
+            <button onClick={() => setShowLogin(false)} style={{ color: "#D1782E", background: "none", border: "none", cursor: "pointer" }}>
               Sign Up
-            </StyledButton>
+            </button>
           </p>
         </>
       ) : (
         <>
           <SignupForm onLogin={onLogin} />
-          <Divider />
+          <hr style={{ border: "none", borderBottom: "1px solid #ccc", margin: "16px 0" }} />
           <p>
             Already have an account? &nbsp;
-            <StyledButton color="secondary" onClick={() => setShowLogin(true)}>
+            <button onClick={() => setShowLogin(true)} style={{ color: "#D1782E", background: "none", border: "none", cursor: "pointer" }}>
               Log In
-            </StyledButton>
+            </button>
           </p>
         </>
       )}
-    </Wrapper>
+    </div>
   );
 }
-
-const Logo = styled.h1`
-  font-family: "Sora", monospace;
-  font-size: 3rem;
-  color: #D1782E;
-  margin: 8px 0 16px;
-`;
-
-const Wrapper = styled.section`
-  max-width: 500px;
-  margin: 40px auto;
-  padding: 16px;
-`;
-
-const Divider = styled.hr`
-  border: none;
-  border-bottom: 1px solid #ccc;
-  margin: 16px 0;
-`;
 
 export default Login;

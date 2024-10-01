@@ -13,7 +13,20 @@ function UserCard({ user }) {
       }}
     >
       <h3>{user.username}</h3>
-      <p>{user.appointment || 'No appointment available'}</p>
+      <p>Email: {user.email}</p>
+      <p>Birthdate: {user.birthdate}</p>
+      <h4>Appointments:</h4>
+      {user.appointments && user.appointments.length > 0 ? (
+        <ul>
+          {user.appointments.map((appointment) => (
+            <li key={appointment.id}>
+              {appointment.date} at {appointment.time} - {appointment.hairstyle} with {appointment.stylist}
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p>No appointments available</p>
+      )}
     </li>
   );
 }

@@ -4,7 +4,7 @@ const MoonPhasePage = () => {
   const [moonPhases, setMoonPhases] = useState([]); // Store all moon phases for the month
   const [error, setError] = useState(null);
 
-  const month = 9; // September
+  const month = 10; // ----update to October for presentation
   const year = 2024;
 
   const getHairstyles = (phase) => {

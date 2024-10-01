@@ -5,13 +5,11 @@ from sqlalchemy.orm import validates
 from sqlalchemy.ext.hybrid import hybrid_property
 from datetime import time as dt_time, datetime
 import re
-
 from config import db
+from werkzeug.security import generate_password_hash, check_password_hash
 
 # Models go here!
-
 # use re for email validation and time validation
-
 
 class User(db.Model):
     __tablename__ = 'users'
@@ -21,7 +19,6 @@ class User(db.Model):
     email = db.Column(db.String, unique=True, nullable=False)
     _password_hash = db.Column(db.String)
     birthdate = db.Column(db.Date, nullable=False)
-    # phone_number =
     # zodiac =
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
@@ -54,12 +51,20 @@ class User(db.Model):
     # def authenticate(self, password):
     #     return bcrypt.check_password_hash(self._password_hash, password.encode('utf-8'))
     
+    # @password_hash.setter
+    # def password_hash(self, password):
+    #     self._password_hash = bcrypt.generate_password_hash(password.encode('utf-8')).decode('utf-8')
+
+    # def authenticate(self, password):
+    #     return bcrypt.check_password_hash(self._password_hash, password.encode('utf-8'))
+
     @password_hash.setter
     def password_hash(self, password):
-        self._password_hash = bcrypt.generate_password_hash(password.encode('utf-8')).decode('utf-8')
+        self._password_hash = generate_password_hash(password)
+        print(f"Password hash set for user {self.username}: {self._password_hash}") 
 
     def authenticate(self, password):
-        return bcrypt.check_password_hash(self._password_hash, password.encode('utf-8'))
+        return check_password_hash(self._password_hash, password)
 
     # @validates('password_hash')
     # def validate_password(self, key, password):
@@ -124,6 +129,7 @@ class Hairstyle(db.Model):
     moon_phase_id = db.Column(db.Integer, db.ForeignKey('moonphases.id'))
     image = db.Column(db.String)
     price = db.Column(db.Float, nullable=False)
+    type = db.Column(db.String, nullable=False)
 
     # Relationships
     appointments = db.relationship('Appointment', back_populates='hairstyle')
@@ -134,6 +140,12 @@ class Hairstyle(db.Model):
         if not user_name or len(user_name) > 30:
             raise ValueError("Hairstyle name must not be empty and must not exceed 30 characters.")
         return user_name
+    
+    @validates('type')
+    def validate_type(self, key, user_type):
+        if user_type not in ['women', 'men', 'colors']:
+            raise ValueError("Type must be 'women', 'men', or 'colors'.")
+        return user_type
 
     # @validates('image')
     # def validate_image(self, key, user_image):

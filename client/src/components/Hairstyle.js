@@ -7,7 +7,8 @@ const Hairstyle = () => {
   useEffect(() => {
     fetch("http://localhost:5555/hairstyles")
       .then(res => res.json())
-      .then(data => setHairstyles(data));
+      .then(data => setHairstyles(data))
+      .catch(error => console.error('Error fetching hairstyles:', error));
   }, []);
 
   return (
@@ -19,6 +20,7 @@ const Hairstyle = () => {
             <HairstyleCard
               key={hairstyle.id}
               hairstyle={hairstyle}
+              hairstylePrice={hairstyle.price}
             />
           ))}
         </ul>

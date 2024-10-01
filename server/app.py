@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-
+from werkzeug.security import generate_password_hash
 # Standard library imports
 from dotenv import load_dotenv
 import os
@@ -7,7 +7,7 @@ import os
 # Remote library imports
 from flask import request, make_response, jsonify, session
 from flask_restful import Resource
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, time
 from sqlalchemy.exc import IntegrityError
 import requests
 
@@ -50,8 +50,17 @@ class UserList(Resource):
             'id': user.id, 
             'username': user.username, 
             'email': user.email, 
-            'birthdate': user.birthdate.strftime('%Y-%m-%d')   #to format it w/o GMT
-            } for user in users], 200)
+            'birthdate': user.birthdate.strftime('%Y-%m-%d'),   #to format it w/o GMT
+            'appointments': [
+                {
+                    'id': appointment.id,
+                    'date': appointment.date.strftime('%Y-%m-%d'),  # Format date
+                    'time': appointment.time.strftime('%H:%M') if appointment.time else None,  # Format time
+                    'hairstyle': appointment.hairstyle.name,  # Include hairstyle name
+                    'stylist': appointment.stylist.name  # Include stylist name
+                } for appointment in user.appointments
+            ]
+        } for user in users], 200)
     
     def post(self):
         data = request.get_json()
@@ -84,8 +93,17 @@ class UserResource(Resource):
             'id': user.id, 
             'username': user.username, 
             'email': user.email, 
-            'birthdate': user.birthdate.strftime('%Y-%m-%d') 
-            }, 200)
+            'birthdate': user.birthdate.strftime('%Y-%m-%d'),
+            'appointments': [
+                {
+                    'id': appointment.id,
+                    'date': appointment.date.strftime('%Y-%m-%d'),  # Format date
+                    'time': appointment.time.strftime('%H:%M') if appointment.time else None,  # Format time
+                    'hairstyle': appointment.hairstyle.name,
+                    'stylist': appointment.stylist.name
+                } for appointment in user.appointments
+            ] 
+        }, 200)
 
     def patch(self, id):
         # user = User.query.get(id)
@@ -160,7 +178,7 @@ class HairstyleList(Resource):
     def get(self):
         hairstyles = Hairstyle.query.all()
         return make_response(
-            [{'id': hairstyle.id, 'name': hairstyle.name} for hairstyle in hairstyles], 200)
+            [{'id': hairstyle.id, 'name': hairstyle.name, 'price': hairstyle.price} for hairstyle in hairstyles], 200)
     
     def post(self):
         data = request.get_json()
@@ -176,7 +194,7 @@ class HairstyleResource(Resource):
         hairstyle = Hairstyle.query.get(id)
         if hairstyle is None:
             return make_response({'message': 'Hairstyle not found'}, 404)
-        return make_response({'id': hairstyle.id, 'name': hairstyle.name}, 200)
+        return make_response({'id': hairstyle.id, 'name': hairstyle.name, 'price': hairstyle.price}, 200)
 
     def patch(self, id):
         hairstyle = Hairstyle.query.get(id)
@@ -269,7 +287,9 @@ api.add_resource(AppointmentList, '/appointments')
    
 class AppointmentResource(Resource):
     def get(self, id):
-        appointment = Appointment.query.get(id)
+        # appointment = Appointment.query.get(id)
+        appointment = db.session.get(Appointment, id)  # Use Session.get() instead of Query.get()
+
         if appointment is None:
             return make_response({'message': 'Appointment not found'}, 404)
         return make_response({
@@ -281,15 +301,56 @@ class AppointmentResource(Resource):
             'stylist_id': appointment.stylist_id}, 200)
 
 
+    # def patch(self, id):
+    #     appointment = Appointment.query.get(id)
+    #     if appointment is None:
+    #         return make_response({'message': 'Appointment not found'}, 404)
+    #     data = request.get_json()
+    #     for key, value in data.items():
+    #         setattr(appointment, key, value)
+    #     db.session.commit()
+    #     return make_response({'id': appointment.id}, 200)
+
     def patch(self, id):
-        appointment = Appointment.query.get(id)
+        # appointment = Appointment.query.get(id)
+        appointment = db.session.get(Appointment, id)  # Use Session.get() instead of Query.get()
         if appointment is None:
             return make_response({'message': 'Appointment not found'}, 404)
+        
         data = request.get_json()
+        
+        # # Handle time conversion
+        # if 'time' in data and isinstance(data['time'], str):
+        #     try:
+        #         hours, minutes = map(int, data['time'].split(':'))
+
+        #         now = datetime.now()
+        #         data['time'] = datetime(now.year, now.month, now.day, hours, minutes)
+
+        #         # data['time'] = time(hour=hours, minute=minutes)
+        #     except ValueError:
+        #         return make_response({'error': "Invalid time format. Use 'HH:MM'."}, 400)
+
+        #     # Update appointment fields
+        #     for key, value in data.items():
+        #         setattr(appointment, key, value)
+
+         # Handle time conversion
+        if 'time' in data and isinstance(data['time'], str):
+            try:
+                hours, minutes = map(int, data['time'].split(':'))
+                data['time'] = time(hour=hours, minute=minutes)
+            except ValueError:
+                return make_response({'error': "Invalid time format. Use 'HH:MM'."}, 400)
+
+        # Update appointment fields
         for key, value in data.items():
+            if key == 'updated_at':
+                value = datetime.now()  # Set to current datetime for updated_at
             setattr(appointment, key, value)
-        db.session.commit()
-        return make_response({'id': appointment.id}, 200)
+
+            db.session.commit()
+            return make_response({'id': appointment.id}, 200)
 
     def delete(self, id):
         appointment = Appointment.query.get(id)
@@ -447,26 +508,134 @@ class MoonPhaseResource(Resource):
 
 api.add_resource(MoonPhaseResource, '/moon-phases')  
 
+# class Signup(Resource):
+#     def post(self):
+#         try:
+#             data = request.get_json()
+#             new_user = User(
+#                 username=data.get('username')
+             
+#             )
+#             new_user.password_hash = data.get('password')
+#             db.session.add(new_user)
+#             db.session.commit()
+            
+#             session['user_id'] = new_user.id
+#             # print(new_user)
+#             return make_response(new_user.to_dict(), 201)
+            
+#         except Exception as e:
+#             return make_response({'error': str(e)}, 422)
+# api.add_resource(Signup, '/signup', endpoint='signup')   
+
+# class Signup(Resource):
+#     def post(self):
+#         try:
+#             data = request.get_json()
+
+#             # Validate input data
+#             if not data or 'username' not in data or 'password' not in data:
+#                 return make_response({'error': 'Username and password are required.'}, 400)
+
+#             new_user = User(
+#                 username=data['username']),
+#             email=data.get('email'), 
+#             # Hash the password before saving
+#             new_user.password_hash = generate_password_hash(data['password'])
+#             # new_user.password_hash = data['password']  # You should hash the password before storing it
+#             db.session.add(new_user)
+#             db.session.commit()
+
+#             session['user_id'] = new_user.id
+#             return make_response(new_user.to_dict(), 201)
+
+#         except Exception as e:
+#             return make_response({'error': str(e)}, 422)
+# class Signup(Resource):
+#     def post(self):
+#         try:
+#             # data = {
+#             #     'username': 'unique_testuser',
+#             #     'email': 'unique_testuser@example.com',
+#             #     'password': 'testpassword',
+#             #     'password_confirmation': 'testpassword'
+#             # }
+
+#     #             {
+#     #     "email": "onepagelisa@example.net",
+#     #     "username": "onepagelisa",
+#     #     "password": "onepage",
+#     #     "password_confirmation": "onepage"
+#     # }
+#             data = request.get_json()
+#             print(data)
+#             # new_user = User(
+#             #     username=data.get('username'),
+#             #     email=data.get('email'),  # Ensure you are saving the email
+#             # )
+
+#                         # Ensure email is present
+#             if not data.get('email'):
+#                 raise ValueError("Email is required")
+            
+#             new_user = User(
+#                 username=data.get('username'),
+#                 email=data.get('email'),
+#                 birthdate=datetime(2000, 1, 1)  # Example birthdate; adjust as necessary
+#             )
+#             new_user.password_hash = generate_password_hash(data['password'])
+#             db.session.add(new_user)
+#             db.session.commit()
+
+#             return make_response(new_user.username, 201)  # Return a simple success message
+
+#         except Exception as e:
+#             print(f"Error: {str(e)}")  # Log the specific error message
+#             return make_response({'error': str(e)}, 422)   
+
+#         #     new_user.password_hash = data.get('password')  # Hash the password before saving
+#         #     db.session.add(new_user)
+#         #     db.session.commit()
+            
+#         #     session['user_id'] = new_user.id
+#         #     return make_response(new_user.to_dict(), 201)
+#         # except Exception as e:
+#         #     print(f"Error: {str(e)}")  # Log the specific error message
+#         #     # print(str(e))  # Print the specific error message for debugging
+#         #     return make_response({'error': str(e)}, 422)
+
 class Signup(Resource):
     def post(self):
         try:
             data = request.get_json()
+            print(data)  # Debugging output
+
+            # Ensure email is present
+            if not data.get('email'):
+                raise ValueError("Email is required")
+            
             new_user = User(
-                username=data.get('username')#,
-                # image_url=data.get('image_url')
+                username=data.get('username'),
+                email=data.get('email'),
+                birthdate=data.get('birthdate'),  
             )
-            new_user.password_hash = data.get('password')
+            new_user.password_hash = generate_password_hash(data['password'])
             db.session.add(new_user)
             db.session.commit()
-            
-            session['user_id'] = new_user.id
-            # print(new_user)
-            return make_response(new_user.to_dict(), 201)
-            
-        except Exception as e:
-            return make_response({'error': str(e)}, 422)
 
-api.add_resource(Signup, '/signup', endpoint='signup')        
+            # Return a JSON response with the new user's information
+            return make_response({
+                "username": new_user.username,
+                "email": new_user.email,
+                "birthdate": new_user.birthdate,    
+            }, 201)  # 201 Created status code
+
+        except Exception as e:
+            print(f"Error: {str(e)}")  # Log the specific error message
+            return make_response({'error': str(e)}, 422)  # Return errors as JSON
+
+api.add_resource(Signup, '/signup', endpoint='signup')  
+     
         
 class CheckSession(Resource):
     def get(self):
@@ -509,6 +678,9 @@ class Logout(Resource):
         return make_response({'error': 'Unauthorized'}, 401)
     
 api.add_resource(Logout, '/logout', endpoint='logout')    
+
+# api: gunicorn -b 127.0.0.1:5555 --chdir ./server app:app
+# api: gunicorn -b 127.0.0.1:5555 --chdir ./server --timeout 60 app:app
 
 
 if __name__ == '__main__':

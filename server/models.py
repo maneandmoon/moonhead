@@ -17,7 +17,8 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String, unique=True, nullable=False)
     email = db.Column(db.String, unique=True, nullable=False)
-    _password_hash = db.Column(db.String)
+    _password_hash = db.Column(db.String(150))
+    is_active = db.Column(db.Boolean, default=True)
     birthdate = db.Column(db.Date, nullable=False)
     # zodiac =
     created_at = db.Column(db.DateTime, server_default=db.func.now())
@@ -38,15 +39,44 @@ class User(db.Model):
             raise ValueError("Email format is invalid.")
         return email
 
-    @hybrid_property
-    def password_hash(self):
-        raise AttributeError('password is private')
-        # return self._password_hash
+    # @property
+    # def password(self):
+    #     raise AttributeError('password is private')
+    
+    # @password.setter
+    # def password(self, password):
+    #     self._password_hash = bcrypt.generate_password_hash(password).decode('utf-8')
+    #     print(f"Password hash set for user {self.username}: {self._password_hash}")
+    
+    # def check_password(self, password):
+    #     return check_password_hash(self._password_hash, password)
+
+    @property
+    def password(self):
+        raise AttributeError('password is not a readable attribute')
+
+    @password.setter
+    def password(self, password):
+        self._password_hash = generate_password_hash(password)
+        print(f"Password hash set for user {self.username}: {self._password_hash}")
+
+    def check_password(self, password):
+        return check_password_hash(self._password_hash, password)
+    
+    def get_id(self):  # Add this method
+        return self.id
+
+    # 3rd changes:
+    # @hybrid_property
+    # def password_hash(self):
+    #     raise AttributeError('password is private')
+    #     # return self._password_hash
     
     # @password_hash.setter
     # def password_hash(self, password):
     #     password_hash = bcrypt.generate_password_hash(password.encode('utf-8'))
     #     self._password_hash = password_hash.decode('utf-8')
+    #     print(f"Password hash set for user {self.username}: {self._password_hash}")
 
     # def authenticate(self, password):
     #     return bcrypt.check_password_hash(self._password_hash, password.encode('utf-8'))
@@ -58,13 +88,19 @@ class User(db.Model):
     # def authenticate(self, password):
     #     return bcrypt.check_password_hash(self._password_hash, password.encode('utf-8'))
 
-    @password_hash.setter
-    def password_hash(self, password):
-        self._password_hash = generate_password_hash(password)
-        print(f"Password hash set for user {self.username}: {self._password_hash}") 
+    # @password_hash.setter
+    # def password(self, password):
+    #     self._password_hash = generate_password_hash(password)
+    #     print(f"Password hash set for user {self.username}: {self._password_hash}")
 
-    def authenticate(self, password):
-        return check_password_hash(self._password_hash, password)
+    # # use this before changes
+    # @password_hash.setter
+    # def password_hash(self, password):
+    #     self._password_hash = generate_password_hash(password)
+    #     print(f"Password hash set for user {self.username}: {self._password_hash}") 
+
+    # def authenticate(self, password):
+    #     return check_password_hash(self._password_hash, password)
 
     # @validates('password_hash')
     # def validate_password(self, key, password):

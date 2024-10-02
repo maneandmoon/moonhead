@@ -1,18 +1,19 @@
 #!/usr/bin/env python3
-from werkzeug.security import generate_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
 # Standard library imports
 from dotenv import load_dotenv
 import os
 
 # Remote library imports
 from flask import request, make_response, jsonify, session
+from flask_login import LoginManager, login_user, logout_user, current_user
 from flask_restful import Resource
 from datetime import datetime, timedelta, time
 from sqlalchemy.exc import IntegrityError
 import requests
 
 # Local imports
-from config import app, db, api
+from config import app, db, api, bcrypt
 
 # Add your model imports
 from models import db, User, Hairstyle, Stylist, Appointment, MoonPhase
@@ -27,6 +28,12 @@ API_KEY = os.getenv('API_KEY')
 @app.route('/')
 def index():
     return '<h1>Project MoonHead</h1>'
+
+# Initialize the login manager
+login_manager = LoginManager(app)
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))  # Ensure this returns a User instance by ID
 
 # User
 
@@ -66,6 +73,7 @@ class UserList(Resource):
         data = request.get_json()
         birthdate = datetime.strptime(data['birthdate'], '%Y-%m-%d')
         new_user = User(username=data['username'], email=data['email'], birthdate=birthdate)
+        new_user.password = data['password']  # Set the password correctly
 
         # , password_hash=data['password']
         db.session.add(new_user)
@@ -619,9 +627,13 @@ class Signup(Resource):
                 email=data.get('email'),
                 birthdate=data.get('birthdate'),  
             )
-            new_user.password_hash = generate_password_hash(data['password'])
+            new_user.password = data['password']  # Use the setter to hash the password
             db.session.add(new_user)
             db.session.commit()
+            # # new_user.password_hash = generate_password_hash(data['password'])
+            # new_user.password_hash = bcrypt.generate_password_hash(data['password']).decode('utf-8')
+            # db.session.add(new_user)
+            # db.session.commit()
 
             # Return a JSON response with the new user's information
             return make_response({
@@ -637,47 +649,171 @@ class Signup(Resource):
 api.add_resource(Signup, '/signup', endpoint='signup')  
      
         
+# class CheckSession(Resource):
+#     def get(self):
+#         user = User.query.filter(User.id == session.get('user_id')).first()
+#         print(session.get('user_id'), user)
+#         if user:
+#             return make_response(user.to_dict())
+#         else:
+#             return make_response({'message': '401: Not Authorized'}, 401)
+        
+#         # Accessing the current logged-in user:
+# if current_user.is_authenticated:
+#     print(current_user.username)
+
+# api.add_resource(CheckSession, '/check_session', endpoint='check_session')        
+# 
+# 3rd iteration
+# class CheckSession(Resource):
+#     def get(self):
+#         # Using Flask-Login's current_user
+#         if current_user.is_authenticated:
+#             return make_response(current_user.to_dict(), 200)
+#         else:
+#             return make_response({'message': '401: Not Authorized'}, 401)
+
+# api.add_resource(CheckSession, '/check_session', endpoint='check_session')
+
 class CheckSession(Resource):
     def get(self):
-        user = User.query.filter(User.id == session.get('user_id')).first()
-        print(session.get('user_id'), user)
-        if user:
-            return make_response(user.to_dict())
+        # Using Flask-Login's current_user
+        if current_user.is_authenticated:
+            # Manually create the user data dictionary
+            user_data = {
+                'id': current_user.id,
+                'username': current_user.username,
+                'email': current_user.email,
+                'birthdate': current_user.birthdate.strftime('%Y-%m-%d') if current_user.birthdate else None,
+                # Add more fields as needed
+            }
+            return make_response(user_data, 200)
         else:
             return make_response({'message': '401: Not Authorized'}, 401)
 
-api.add_resource(CheckSession, '/check_session', endpoint='check_session')        
-        
-class Login(Resource):
+# Add the resource to your API
+api.add_resource(CheckSession, '/check_session', endpoint='check_session')
 
+
+# @login_manager.user_loader
+# def load_user(user_id):
+#     return User.query.get(int(user_id))  # Ensure this returns a User instance by ID
+        
+# class Login(Resource):
+
+#     def post(self):
+#         data = request.get_json()
+#         # print(data)
+#         username = data.get('username')
+#         password = data.get('password')
+
+#         user = User.query.filter_by(username=username).first()
+#         print(session.get('user_id'))
+
+#         # if user and user.authenticate(password):
+#         #     session['user_id'] = user.id
+#         #     return make_response(user.to_dict(), 200)
+
+#         if user and bcrypt.check_password_hash(user.password_hash, password):
+#             session['user_id'] = user.id
+#             return make_response(user.to_dict(), 200)
+
+#             # return make_response({'error': 'Invalid username or password'}, 401)
+# 2nd login try
+# class Login(Resource):
+#     def post(self):
+#         data = request.get_json()
+#         user = User.query.filter_by(username=data.get('username')).first()
+
+#         if user and bcrypt.check_password_hash(user.password_hash, data['password']):
+#             login_user(user)  # This logs in the user and manages the session
+#             return make_response(user.to_dict(), 200)
+
+#         return make_response({'error': 'Invalid username or password'}, 401)
+
+# api.add_resource(Login, '/login', endpoint='login')    
+
+# 3rd interation
+# class Login(Resource):
+#     def post(self):
+#         data = request.get_json()
+#         user = User.query.filter_by(username=data.get('username')).first()
+
+#         # if user and user.check_password(data['password']):
+#         #     login_user(user)  # This logs in the user and manages the session
+#         #     return make_response(user.to_dict(), 200)
+
+#         # return make_response({'error': 'Invalid username or password'}, 401)
+#         if user:
+#             if user._password_hash is None:
+#                 return make_response({'error': 'Password not set for user.'}, 400)
+#             if user.check_password(data['password']):
+#                 login_user(user)
+#                 return make_response(user.to_dict(), 200)
+
+#         return make_response({'error': 'Invalid username or password'}, 401)
+    
+# api.add_resource(Login, '/login', endpoint='login')
+
+class Login(Resource):
     def post(self):
         data = request.get_json()
-        # print(data)
         username = data.get('username')
         password = data.get('password')
 
         user = User.query.filter_by(username=username).first()
-        print(session.get('user_id'))
 
-        if user and user.authenticate(password):
-            session['user_id'] = user.id
-            return make_response(user.to_dict(), 200)
+        if user:
+            if user._password_hash is None:
+                return make_response({'error': 'Password not set for user.'}, 400)
+            if user.check_password(password):
+                login_user(user)
+
+                # Manually create the user data dictionary
+                user_data = {
+                    'id': user.id,
+                    'username': user.username,
+                    'email': user.email,
+                    'birthdate': user.birthdate.strftime('%Y-%m-%d') if user.birthdate else None,
+                    # Add more fields as needed
+                }
+
+                return make_response(user_data, 200)
 
         return make_response({'error': 'Invalid username or password'}, 401)
 
-api.add_resource(Login, '/login', endpoint='login')    
+# Add the resource to your API
+api.add_resource(Login, '/login', endpoint='login')
+
+
+# class Logout(Resource):
+#     def delete(self):
+#         user_id = session.get('user_id')
+        
+#         if user_id:
+#             session['user_id'] = None
+#             return make_response({'message': '204: No Content'}, 204)
+        
+#         return make_response({'error': 'Unauthorized'}, 401)
 
 class Logout(Resource):
     def delete(self):
         user_id = session.get('user_id')
         
         if user_id:
-            session['user_id'] = None
+            logout_user()  # Logs out the current user
             return make_response({'message': '204: No Content'}, 204)
         
         return make_response({'error': 'Unauthorized'}, 401)
-    
+
 api.add_resource(Logout, '/logout', endpoint='logout')    
+
+@app.route('/current_user_test')
+def current_user_test():
+    if current_user.is_authenticated:
+        return f"Logged in as: {current_user.username}"
+    else:
+        return "Not logged in"
 
 # api: gunicorn -b 127.0.0.1:5555 --chdir ./server app:app
 # api: gunicorn -b 127.0.0.1:5555 --chdir ./server --timeout 60 app:app

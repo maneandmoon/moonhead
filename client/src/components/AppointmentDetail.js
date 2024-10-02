@@ -1,6 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import formatTime from './formatTime';
+import { AppointmentContext } from './AppointmentContext';
+import useAppointments from './useAppointments';
+
 
 function AppointmentDetail() {
   const { id } = useParams();
@@ -10,6 +13,8 @@ function AppointmentDetail() {
   const [hairstyle, setHairstyle] = useState(null);
   const [stylist, setStylist] = useState(null);
   const [loading, setLoading] = useState(true);
+  // const { appointments, updateAppointment } = useContext(AppointmentContext);
+  const { appointments, updateAppointment } = useAppointments();
 
   useEffect(() => {
     fetch(`http://127.0.0.1:5555/appointments/${id}`)
@@ -33,6 +38,9 @@ function AppointmentDetail() {
         setUser(userData);
         setHairstyle(hairstyleData);
         setStylist(stylistData);
+        // console.log("User Data:", userData);
+        // console.log("Hairstyle Data:", hairstyleData);
+        // console.log("Stylist Data:", stylistData);
       })
       .catch(err => console.error("Unable to fetch appointment details:", err))
       .finally(() => setLoading(false));
@@ -69,7 +77,7 @@ function AppointmentDetail() {
     <div>
       <h2>Appointment Details</h2>
       <p>Appointment ID: {appointment.id}</p>
-      <p>User: {user ? user.name : 'Unknown'}</p>
+      <p>User: {user ? user.username : 'Unknown'}</p>
       <p>Hairstyle: {hairstyle ? hairstyle.name : 'Unknown'}</p>
       <p>Stylist: {stylist ? stylist.name : 'Unknown'}</p>
       <p>Date: {appointment.date}</p>

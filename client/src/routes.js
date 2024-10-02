@@ -37,7 +37,8 @@ const routes = [
     },
     {
         path: "/appointments/edit/:id", 
-        element: <EditAppointmentPage updateAppointment={updateAppointment} />
+        element: <EditAppointmentPage /> 
+        // updateAppointment={updateAppointment} 
       },
     {
         path: "/hairstyles",

@@ -113,7 +113,8 @@ function SignupForm({ onLogin }) {
               type="password"
               name="password"
               placeholder="Password"
-              autoComplete="current-password"
+              autoComplete="new-password"
+            //   "current-password"
               onChange={formik.handleChange}
               value={formik.values.password}
               disabled={formik.isSubmitting} // Disable input during submission

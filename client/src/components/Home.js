@@ -32,8 +32,12 @@ function Home() {
         </ul>
       </section>
 
-      {/* Integrated Zodiac Section */}
-      <Zodiac />
+      <section className="bg-gray-100 p-4 rounded-lg shadow-md mb-6">
+        <h2 className="text-2xl font-semibold mb-2 text-center">Hairstyles based on Zodiac Signs</h2>
+        <div className="flex overflow-x-auto space-x-4 p-4">
+          <Zodiac />
+        </div>
+      </section>
 
       <section className="bg-gray-100 p-4 rounded-lg shadow-md mb-6">
         <h2 className="text-2xl font-semibold mb-2">Book Your Appointment</h2>

@@ -246,7 +246,8 @@ def seed_data():
             email=fake.email(),
             birthdate=fake.date_of_birth(minimum_age=18),
         )
-        user.password_hash = fake.password()  # Use the setter to set the password_hash
+        user.password = fake.password() 
+        # user.password_hash = fake.password()  # Use the setter to set the password_hash
         users.append(user)
         db.session.add(user)
 

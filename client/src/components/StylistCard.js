@@ -13,7 +13,7 @@ function StylistCard({ stylist }) {
       }}
     >
       <h3>{stylist.name}</h3>
-      <p>{stylist.specialty || 'No appointment available'}</p>
+      <p>Specialty: {stylist.specialty || 'No appointment available'}</p>
     </li>
   );
 }

@@ -15,9 +15,11 @@ const AppointmentDetail = lazy(() => import("./AppointmentDetail"));
 const EditAppointment = lazy(() => import("./EditAppointment"));
 const Hairstyle = lazy(() => import("./Hairstyle"));
 const Stylist = lazy(() => import("./Stylist"));
+const StylistDetail = lazy(() => import("./StylistDetail"));
 const Login = lazy(() => import("./Login"));
 const Signup = lazy(() => import("./Signup"));
 const User = lazy(() => import("./User"));
+const UserDetail = lazy(() => import("./UserDetail"));
 
 function App() {
     const [users, setUsers] = useState([]);
@@ -88,10 +90,12 @@ function App() {
                     <Route path="/appointments/:id" element={<AppointmentDetail />} />   
                     <Route path="/appointments/edit/:id" element={<EditAppointment />} />     
                     <Route path="/stylists" element={<Stylist />} />
+                    <Route path="/stylists/:id" element={<StylistDetail />} />
                     <Route path="/hairstyles" element={<Hairstyle />} />
                     <Route path="/login" element={<Login onLogin={login} />} />
                     <Route path="/signup" element={<Signup onLogin={login} />} /> 
                     <Route path="/users" element={<User />} />
+                    <Route path="/users/:id" element={<UserDetail />} />
                 </Routes>
             </Suspense>
         </AppointmentProvider>

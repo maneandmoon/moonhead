@@ -12,7 +12,7 @@ const User = () => {
 
   return (
     <div>
-      <h1>User List</h1>
+      <h1>Users and Appointments</h1>
       {users.length > 0 ? (
         <ul>
           {users.map(user => (

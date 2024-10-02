@@ -1,4 +1,6 @@
 import React from 'react';
+import formatTime from './formatTime';
+import formatDate from './formatDate';
 
 function UserCard({ user }) {
   return (
@@ -14,13 +16,27 @@ function UserCard({ user }) {
     >
       <h3>{user.username}</h3>
       <p>Email: {user.email}</p>
-      <p>Birthdate: {user.birthdate}</p>
+      <p>Birthdate: {formatDate(user.birthdate)}</p>
       <h4>Appointments:</h4>
       {user.appointments && user.appointments.length > 0 ? (
         <ul>
           {user.appointments.map((appointment) => (
             <li key={appointment.id}>
-              {appointment.date} at {appointment.time} - {appointment.hairstyle} with {appointment.stylist}
+              <p>
+                {formatDate(appointment.date)} at {formatTime(appointment.time)}
+              </p>
+
+              <p>
+                Hairstyle: {appointment.hairstyle || 'Unknown'}
+              </p>
+
+              <p>
+                Price: {appointment.price ? `$${appointment.price}` : 'Unknown'}
+              </p>
+
+              <p>
+                Stylist: {appointment.stylist || 'Unknown'}
+              </p>
             </li>
           ))}
         </ul>
@@ -32,3 +48,5 @@ function UserCard({ user }) {
 }
 
 export default UserCard;
+
+

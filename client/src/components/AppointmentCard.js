@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';  // Import useNavigate
 import EditAppointmentForm from './EditAppointmentForm';
 import { AppointmentContext } from './AppointmentContext';
 import formatTime from './formatTime';
+import formatDate from './formatDate';
 
 function AppointmentCard({ appointment, user, hairstyle, stylist }) {
   const { updateAppointment, deleteAppointment } = useContext(AppointmentContext);
@@ -37,8 +38,9 @@ function AppointmentCard({ appointment, user, hairstyle, stylist }) {
       <h3>Appointment ID: {appointment.id}</h3>
       <p>User: {user ? user.username : 'Unknown'}</p>
       <p>Hairstyle: {hairstyle ? hairstyle.name : 'Unknown'}</p>
+      <p>Price: {hairstyle ? `$ ${hairstyle.price}` : 'Unknown'}</p>
       <p>Stylist: {stylist ? stylist.name : 'Unknown'}</p>
-      <p>Date: {appointment.date}</p>
+      <p>Date: {formatDate(appointment.date)}</p>
       <p>Time: {formatTime(appointment.time)}</p>
 
       <button onClick={handleEdit}>Edit</button>

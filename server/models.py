@@ -24,7 +24,7 @@ class User(db.Model):
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
     # zodiac = db.Column(db.String, unique=True, nullable=False)
 
-    appointments = db.relationship('Appointment', back_populates='user')
+    appointments = db.relationship('Appointment', back_populates='user', cascade="all, delete-orphan")
     hairstyles = association_proxy('appointments', 'hairstyle')
 
     @validates('username')

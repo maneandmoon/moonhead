@@ -6,4 +6,5 @@ const formatTime = (time) => {
     return `${formattedHour}:${minute} ${ampm}`;
 };
 
+
 export default formatTime;

@@ -52,7 +52,8 @@ class UserList(Resource):
                     'date': appointment.date.strftime('%Y-%m-%d'),  # Format date
                     'time': appointment.time.strftime('%H:%M') if appointment.time else None,  # Format time
                     'hairstyle': appointment.hairstyle.name,  # Include hairstyle name
-                    'stylist': appointment.stylist.name  # Include stylist name
+                    'stylist': appointment.stylist.name,  # Include stylist name
+                    'price': appointment.hairstyle.price
                 } for appointment in user.appointments
             ]
         } for user in users], 200)
@@ -95,7 +96,8 @@ class UserResource(Resource):
                     'date': appointment.date.strftime('%Y-%m-%d'),  # Format date
                     'time': appointment.time.strftime('%H:%M') if appointment.time else None,  # Format time
                     'hairstyle': appointment.hairstyle.name,
-                    'stylist': appointment.stylist.name
+                    'stylist': appointment.stylist.name,
+                    'price': appointment.hairstyle.price
                 } for appointment in user.appointments
             ] 
         }, 200)

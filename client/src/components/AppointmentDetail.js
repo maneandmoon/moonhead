@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import formatTime from './formatTime';
+import formatDate from './formatDate';
 import { AppointmentContext } from './AppointmentContext';
 import useAppointments from './useAppointments';
 
@@ -13,6 +14,7 @@ function AppointmentDetail() {
   const [hairstyle, setHairstyle] = useState(null);
   const [stylist, setStylist] = useState(null);
   const [loading, setLoading] = useState(true);
+
   // const { appointments, updateAppointment } = useContext(AppointmentContext);
   const { appointments, updateAppointment } = useAppointments();
 
@@ -79,8 +81,9 @@ function AppointmentDetail() {
       <p>Appointment ID: {appointment.id}</p>
       <p>User: {user ? user.username : 'Unknown'}</p>
       <p>Hairstyle: {hairstyle ? hairstyle.name : 'Unknown'}</p>
+      <p>Price: {hairstyle ? `$ ${hairstyle.price}` : 'Unknown'}</p>
       <p>Stylist: {stylist ? stylist.name : 'Unknown'}</p>
-      <p>Date: {appointment.date}</p>
+      <p>Date: {formatDate(appointment.date)}</p>
       <p>Time: {formatTime(appointment.time)}</p>
 
       <button onClick={handleEdit} style={{ marginRight: '10px' }}>

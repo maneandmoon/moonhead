@@ -11,7 +11,7 @@ function AppointmentCard({ appointment, user, hairstyle, stylist }) {
 //   const [isEditing, setIsEditing] = useState(false);
   const [currentAppointment, setCurrentAppointment] = useState(appointment || {});
 
-  const navigate = useNavigate(); // Initialize navigate
+  const navigate = useNavigate(); 
 
 //   const toggleEditForm = () => setIsEditing(!isEditing);
 
@@ -38,7 +38,7 @@ function AppointmentCard({ appointment, user, hairstyle, stylist }) {
       <h3>Appointment ID: {appointment.id}</h3>
       <p>User: {user ? user.username : 'Unknown'}</p>
       <p>Hairstyle: {hairstyle ? hairstyle.name : 'Unknown'}</p>
-      <p>Price: {hairstyle ? `$ ${hairstyle.price}` : 'Unknown'}</p>
+      <p>Price: {hairstyle ? `$${hairstyle.price}` : 'Unknown'}</p>
       <p>Stylist: {stylist ? stylist.name : 'Unknown'}</p>
       <p>Date: {formatDate(appointment.date)}</p>
       <p>Time: {formatTime(appointment.time)}</p>
@@ -48,30 +48,5 @@ function AppointmentCard({ appointment, user, hairstyle, stylist }) {
     </li>
   );
 }
-
-//   return (
-//     <li className="appointment-card">
-//       {isEditing ? (
-//         <EditAppointmentForm
-//           appointment={currentAppointment}
-//           updateAppointment={handleUpdate}
-//           closeForm={toggleEditForm}
-//         />
-//       ) : (
-//         <>
-//           <h3>Appointment ID: {currentAppointment.id}</h3>
-//           <p>User: {user ? user.username : 'Unknown'}</p>
-//           <p>Hairstyle: {hairstyle ? hairstyle.name : 'Unknown'}</p>
-//           <p>Stylist: {stylist ? stylist.name : 'Unknown'}</p>
-//           <p>Date: {currentAppointment.date}</p>
-//           <p>Time: {formatTime(currentAppointment.time)}</p>
-//           {/* <button onClick={handleEdit}>Edit</button> */}
-//           <button onClick={toggleEditForm}>Edit</button>
-//           <button onClick={() => deleteAppointment(currentAppointment.id)}>Delete</button>
-//         </>
-//       )}
-//     </li>
-//   );
-// }
 
 export default AppointmentCard;

@@ -81,7 +81,7 @@ function AppointmentDetail() {
       <p>Appointment ID: {appointment.id}</p>
       <p>User: {user ? user.username : 'Unknown'}</p>
       <p>Hairstyle: {hairstyle ? hairstyle.name : 'Unknown'}</p>
-      <p>Price: {hairstyle ? `$ ${hairstyle.price}` : 'Unknown'}</p>
+      <p>Price: {hairstyle ? `$${hairstyle.price}` : 'Unknown'}</p>
       <p>Stylist: {stylist ? stylist.name : 'Unknown'}</p>
       <p>Date: {formatDate(appointment.date)}</p>
       <p>Time: {formatTime(appointment.time)}</p>

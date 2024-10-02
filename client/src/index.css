@@ -1,3 +1,5 @@
+@import './styles/tailwind.css';
+
 :root {
   --bg: #282c34;
   --header: #fff;
@@ -5,10 +7,10 @@
   --text: hsla(0, 0%, 100%, 0.88);
 }
 
-/* Tailwind CSS directives */
+/* Tailwind CSS directives
 @tailwind base;
 @tailwind components;
-@tailwind utilities;
+@tailwind utilities; */
 
 
 

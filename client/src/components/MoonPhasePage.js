@@ -129,6 +129,7 @@ const MoonPhasePage = () => {
           return response.json();
         })
         .then((data) => {
+          console.log(data); // Add this line to debug
           setMoonPhases(data);
         })
         .catch((err) => {

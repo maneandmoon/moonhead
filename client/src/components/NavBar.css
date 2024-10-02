@@ -1,45 +1,62 @@
+
 /* Main navigation styling */
 .navbar {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    background-color: #333;
-    color: white;
-    padding: 15px 20px;
-    z-index: 1000;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Adds a shadow effect */
-  }
-  
-  .nav-links {
-    list-style: none;
-    display: flex;
-    justify-content: space-around;
-    margin: 0;
-    padding: 0;
-  }
-  
-  .nav-item {
-    display: inline;
-  }
-  
-  .nav-link {
-    color: white;
-    text-decoration: none;
-    padding: 10px 20px;
-    font-weight: bold;
-  }
-  
-  .nav-link:hover {
-    background-color: #555;
-    border-radius: 4px;
-  }
-  
-  .active {
-    color: #ffeb3b; /* Highlight the active link */
-  }
-  
-  /* Body padding to ensure content does not hide behind the navbar */
-  body {
-    padding-top: 60px;
-  }
-  
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0.7), rgba(38, 38, 58, 0.8)); /* Gradient for a night sky effect */
+  color: white;
+  padding: 15px 20px;
+  z-index: 1000;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); /* Enhanced shadow for depth */
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  justify-content: space-around;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-item {
+  display: inline;
+}
+
+.nav-link {
+  color: white;
+  text-decoration: none;
+  padding: 10px 20px;
+  font-weight: bold;
+  position: relative; /* Enable positioning for pseudo-elements */
+}
+
+.nav-link::after {
+  content: ''; /* Create a pseudo-element for the underline effect */
+  position: absolute;
+  left: 0;
+  bottom: -5px; /* Positioning the underline below the text */
+  height: 2px;
+  width: 0; /* Start with zero width for animation */
+  background-color: #ffeb3b; /* Color for the underline */
+  transition: width 0.3s ease; /* Smooth transition for the underline */
+}
+
+.nav-link:hover::after {
+  width: 100%; /* Expand the underline on hover */
+}
+
+.nav-link:hover {
+  color: #ffeb3b; /* Change text color on hover */
+  background-color: rgba(255, 255, 255, 0.1); /* Slightly visible background */
+  border-radius: 4px; /* Rounded corners for hover effect */
+}
+
+.active {
+  color: #ffeb3b; /* Highlight the active link */
+}
+
+/* Body padding to ensure content does not hide behind the navbar */
+body {
+  padding-top: 60px;
+}

@@ -38,7 +38,7 @@ function HairstyleCard({ hairstyle }) {
         className="w-full rounded-lg mb-2"
       />
       <h4 className="text-lg mt-2">Price: ${hairstyle.price}</h4>
-      <p className="text-sm text-gray-500">Zodiac Sign: {hairstyle.zodiac}</p>
+      {/* <p className="text-sm text-gray-500">Zodiac Sign: {hairstyle.zodiac}</p> */}
     </li>
   );
 }

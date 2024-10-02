@@ -12,7 +12,7 @@ const MoonPhasePage = lazy(() => import("./MoonPhasePage"));
 const AppointmentForm = lazy(() => import("./AppointmentForm"));
 const AppointmentList = lazy(() => import("./AppointmentList"));
 const AppointmentDetail = lazy(() => import("./AppointmentDetail"));
-const EditAppointmentPage = lazy(() => import("./EditAppointmentPage"));
+const EditAppointment = lazy(() => import("./EditAppointment"));
 const Hairstyle = lazy(() => import("./Hairstyle"));
 const Stylist = lazy(() => import("./Stylist"));
 const Login = lazy(() => import("./Login"));
@@ -86,7 +86,7 @@ function App() {
                             />} 
                     />
                     <Route path="/appointments/:id" element={<AppointmentDetail />} />   
-                    <Route path="/appointments/edit/:id" element={<EditAppointmentPage />} />     
+                    <Route path="/appointments/edit/:id" element={<EditAppointment />} />     
                     <Route path="/stylists" element={<Stylist />} />
                     <Route path="/hairstyles" element={<Hairstyle />} />
                     <Route path="/login" element={<Login onLogin={login} />} />

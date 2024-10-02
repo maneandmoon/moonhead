@@ -30,23 +30,17 @@ function EditAppointmentForm({ appointment, closeForm }) {
     date: appointment.date || '', // Ensure it's not undefined
     time: appointment.time || '', // Ensure it's not undefined
   };
-  console.log('Initial Values:', initialValues);
+  // console.log('Initial Values:', initialValues);
 
   return (
     <Formik
       initialValues={initialValues}
-      
-      // {{
-      //   // date: appointment.date || '', // Ensure it's not undefined
-      //   // time: appointment.time || '', // Ensure it's not undefined
-      //   // date: appointment.date,
-      //   // time: appointment.time,
-      // }}
       validationSchema={validationSchema}
       onSubmit={(values, { setSubmitting }) => {
         const updatedAppointment = { ...appointment, ...values };
         updateAppointment(updatedAppointment);
         setSubmitting(false);
+        closeForm(); 
       }}
     >
       {({ isSubmitting }) => (
@@ -64,7 +58,7 @@ function EditAppointmentForm({ appointment, closeForm }) {
             <Field as="select" name="time">
               <option value="">Select a time</option>
               {getTimeOptions().map((timeOption) => (
-                <option key={timeOption} value={timeOption}>{formatTime(timeOption)}</option>
+                <option key={timeOption} value={timeOption}>{formatTime(timeOption)}</option>  // originally kept as {formatTime(timeOption)}
               ))}
             </Field>
             <ErrorMessage name="time" component="div" style={{ color: 'red' }} />

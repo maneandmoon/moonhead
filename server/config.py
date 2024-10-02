@@ -9,10 +9,6 @@ from flask_restful import Api
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import MetaData
 from flask_session import Session
-# from flask_login import LoginManager
-
-
-# Local imports
 
 # Instantiate app, set attributes
 app = Flask(__name__)
@@ -40,9 +36,3 @@ api = Api(app)
 CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
 
 bcrypt = Bcrypt(app)
-
-# # Initialize the login manager
-# login_manager = LoginManager(app)
-# @login_manager.user_loader
-# def load_user(user_id):
-#     return User.query.get(int(user_id))  # Ensure this returns a User instance by ID

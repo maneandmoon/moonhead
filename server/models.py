@@ -20,9 +20,9 @@ class User(db.Model):
     _password_hash = db.Column(db.String(150))
     is_active = db.Column(db.Boolean, default=True)
     birthdate = db.Column(db.Date, nullable=False)
-    # zodiac =
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
+    # zodiac = db.Column(db.String, unique=True, nullable=False)
 
     appointments = db.relationship('Appointment', back_populates='user')
     hairstyles = association_proxy('appointments', 'hairstyle')
@@ -39,18 +39,6 @@ class User(db.Model):
             raise ValueError("Email format is invalid.")
         return email
 
-    # @property
-    # def password(self):
-    #     raise AttributeError('password is private')
-    
-    # @password.setter
-    # def password(self, password):
-    #     self._password_hash = bcrypt.generate_password_hash(password).decode('utf-8')
-    #     print(f"Password hash set for user {self.username}: {self._password_hash}")
-    
-    # def check_password(self, password):
-    #     return check_password_hash(self._password_hash, password)
-
     @property
     def password(self):
         raise AttributeError('password is not a readable attribute')
@@ -63,57 +51,14 @@ class User(db.Model):
     def check_password(self, password):
         return check_password_hash(self._password_hash, password)
     
-    def get_id(self):  # Add this method
+    def get_id(self):  
         return self.id
-
-    # 3rd changes:
-    # @hybrid_property
-    # def password_hash(self):
-    #     raise AttributeError('password is private')
-    #     # return self._password_hash
-    
-    # @password_hash.setter
-    # def password_hash(self, password):
-    #     password_hash = bcrypt.generate_password_hash(password.encode('utf-8'))
-    #     self._password_hash = password_hash.decode('utf-8')
-    #     print(f"Password hash set for user {self.username}: {self._password_hash}")
-
-    # def authenticate(self, password):
-    #     return bcrypt.check_password_hash(self._password_hash, password.encode('utf-8'))
-    
-    # @password_hash.setter
-    # def password_hash(self, password):
-    #     self._password_hash = bcrypt.generate_password_hash(password.encode('utf-8')).decode('utf-8')
-
-    # def authenticate(self, password):
-    #     return bcrypt.check_password_hash(self._password_hash, password.encode('utf-8'))
-
-    # @password_hash.setter
-    # def password(self, password):
-    #     self._password_hash = generate_password_hash(password)
-    #     print(f"Password hash set for user {self.username}: {self._password_hash}")
-
-    # # use this before changes
-    # @password_hash.setter
-    # def password_hash(self, password):
-    #     self._password_hash = generate_password_hash(password)
-    #     print(f"Password hash set for user {self.username}: {self._password_hash}") 
-
-    # def authenticate(self, password):
-    #     return check_password_hash(self._password_hash, password)
-
-    # @validates('password_hash')
-    # def validate_password(self, key, password):
-    #     if len(password) < 5:
-    #         raise ValueError("Password must be at least 5 characters long.")
-    #     return password
     
     @validates('birthdate')
     def validate_birthdate(self, key, user_birthdate):
         if isinstance(user_birthdate, str):
             user_birthdate = datetime.strptime(user_birthdate, '%Y-%m-%d').date()  # Convert to date
-
-        # # Debugging: Print type of user_birthdate
+        
         # print(f"Type of user_birthdate: {type(user_birthdate)}")
 
         # Ensure both are date objects for comparison
@@ -134,7 +79,6 @@ class Stylist(db.Model):
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
 
-    # Relationships
     appointments = db.relationship('Appointment', back_populates='stylist')
 
 class MoonPhase(db.Model):
@@ -145,7 +89,6 @@ class MoonPhase(db.Model):
     date = db.Column(db.Date, nullable=False)
     image = db.Column(db.String, nullable=False)
 
-    # Relationships
     hairstyles = db.relationship('Hairstyle', back_populates='moon_phase')    
 
     @validates('image')
@@ -155,7 +98,6 @@ class MoonPhase(db.Model):
         if 'jpg' not in user_image and 'jpeg' not in user_image and 'png' not in user_image:
             raise ValueError('Image must be of type jpeg, jpg, or png')
         return user_image
-
 
 class Hairstyle(db.Model):
     __tablename__ = 'hairstyles'
@@ -167,7 +109,6 @@ class Hairstyle(db.Model):
     price = db.Column(db.Float, nullable=False)
     type = db.Column(db.String, nullable=False)
 
-    # Relationships
     appointments = db.relationship('Appointment', back_populates='hairstyle')
     moon_phase = db.relationship('MoonPhase', back_populates='hairstyles')
 
@@ -183,21 +124,10 @@ class Hairstyle(db.Model):
             raise ValueError("Type must be 'women', 'men', or 'colors'.")
         return user_type
 
-    # @validates('image')
-    # def validate_image(self, key, user_image):
-    #     if not user_image:
-    #         raise ValueError('Image cannot be empty string')
-    #     if 'jpg' not in user_image and 'jpeg' not in user_image and 'png' not in user_image:
-    #         raise ValueError('Image must be of type jpeg, jpg, or png')
-    #     return user_image
-  
     @validates('image')
     def validate_image(self, key, user_image):
         if(user_image == ''):
             raise ValueError('Image cannot be empty string')
-        # image has to be .png, .jpeg, .jpg
-        # if('jpg' not in user_image and 'jpeg' not in user_image and 'png' not in user_image):
-        #     raise ValueError('Image must be of type jpeg, jpg, or png')
         return user_image
     
     @validates('price')
@@ -220,11 +150,9 @@ class Appointment(db.Model):
     hairstyle_id = db.Column(db.Integer, db.ForeignKey('hairstyles.id'), nullable=False)
     stylist_id = db.Column(db.Integer, db.ForeignKey('stylists.id'), nullable=False)
 
-    # Relationships
     user = db.relationship('User', back_populates='appointments')
     hairstyle = db.relationship('Hairstyle', back_populates='appointments')
     stylist = db.relationship('Stylist', back_populates='appointments')
-
 
     @validates('date')
     def validate_date(self, key, date):
@@ -252,6 +180,3 @@ class Appointment(db.Model):
             return appointment_time
 
         raise ValueError("Invalid time format.")
-
-
-

@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import StylistCard from './StylistCard';
 
+
 const Stylist = () => {
   const [stylists, setStylists] = useState([]);
 
@@ -15,7 +16,7 @@ const Stylist = () => {
     <div>
       <h1>Stylist List</h1>
       {stylists.length > 0 ? (
-        <ul>
+        <ul className="stylist-list">
           {stylists.map(stylist => (
             <StylistCard
               key={stylist.id}

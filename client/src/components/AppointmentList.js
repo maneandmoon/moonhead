@@ -6,7 +6,7 @@ function AppointmentList({ users, hairstyles, stylists }) {
   const { appointments } = useAppointments();
 
   return (
-    <ul>
+    <ul className="appointment-list">
       {appointments.map(appointment => {
         const user = users.find(user => user.id === appointment.user_id) || { username: 'Unknown' };
         const hairstyle = hairstyles.find(hairstyle => hairstyle.id === appointment.hairstyle_id) || { name: 'Unknown' };

@@ -172,12 +172,18 @@ const MoonPhasePage = () => {
 
       const hairstyles = moonPhase ? getHairstyles(moonPhase.phase) : [];
 
+      // The push() method of Array instances adds the specified elements to the end of an array and returns the new length of the array.
       calendarRows.push(
         <div key={i} className="calendar-day">
           <h3>{i}</h3>
           {moonPhase ? (
             <>
               <p>Moon Phase: {moonPhase.phase}</p>
+              {/* <img
+                src={moonPhase.image}
+                alt="Moon Phase"
+                className="w-24 h-24 object-cover" // Use Tailwind classes for sizing
+                /> */}
               <img
                 src={moonPhase.image}
                 alt="Moon Phase"
@@ -216,11 +222,11 @@ const MoonPhasePage = () => {
 
   return (
     <div>
-      <h2>
+      <h1>
         Moon Phases Calendar -{" "}
         {new Date(year, month - 1).toLocaleString("default", { month: "long" })}{" "}
         {year}
-      </h2>
+      </h1>
       <div className="calendar">
         {renderDaysOfWeek()}
         {renderCalendar()}
@@ -237,7 +243,7 @@ const MoonPhasePage = () => {
                 padding: 10px;
                 text-align: center;
                 border-radius: 5px;
-                background-color: #f9f9f9;
+                background-color: #3730a3; 
             }
 
             .calendar-day.empty {

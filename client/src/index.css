@@ -1,16 +1,216 @@
 @import './styles/tailwind.css';
 
 :root {
-  --bg: #282c34;
-  --header: #fff;
-  --link: #61dafb;
-  --text: hsla(0, 0%, 100%, 0.88);
+  --bg: #282c34; /* Dark background */
+  --text: hsla(0, 0%, 100%, 0.88); /* Light text color */
+  --link: #818cf8; /* Link color */
 }
 
-/* Tailwind CSS directives
+body {
+  font-family: 'Space Mono', monospace; /* Apply Space Mono font */
+  background-color: var(--bg); /* Use root variable for background */
+  color: var(--text); /* Use root variable for text color */
+}
+
+h1, h2, h3, h4, p, ul, li {
+  font-family: 'Space Mono', monospace; /* Ensure all elements use the same font */
+  color: var(--text); /* Use root variable for text color */
+}
+
+h1 {
+  text-align: center;
+  font-size: 30px;
+  color: #ffeb3b;
+  margin-bottom: 20px;
+}
+
+h2 {
+  text-align: center;
+  font-size: 24px;
+  color: #ffeb3b;
+  margin-bottom: 20px;
+}
+
+h3 {
+  text-align: center;
+  font-size: 22px;
+  color: #ffeb3b;
+  margin-bottom: 20px;
+}
+
+h4 {
+  text-align: center;
+  font-size: 18px;
+  color: var(--text);
+  margin-bottom: 20px;
+}
+
+
+a {
+  color: var(--link);
+}
+
+p {
+  text-align: center;
+  font-size: 18px;
+  color: var(--text);
+  /* margin-bottom: 20px; */
+}
+
+/* li {
+  text-align: center;
+  font-size: 16px;
+  color: var(--text);
+  margin-bottom: 20px;
+} */
+
+section {
+  text-align: center;      /* Center the text and button */
+  margin: 40px 0;         /* Add vertical spacing around the section */
+}
+
+button {
+  padding: 10px 20px;     /* Button padding */
+  font-size: 16px;        /* Button font size */
+  cursor: pointer;         /* Pointer cursor on hover */
+  background-color: var(--link); /* Button background color */
+  color: #fff;            /* Button text color */
+  border: none;           /* Remove default border */
+  border-radius: 5px;     /* Optional: Add rounded corners */
+  transition: background-color 0.3s; /* Add transition for hover effect */
+}
+
+button:hover {
+  background-color: darken(var(--link), 10%); /* Darken the button color on hover */
+}
+
+.user-card {
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin: 10px;
+  padding: 10px;
+  width: 375px; /* Adjust the width as needed */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  text-align: center; /* Center the text inside the card */
+}
+
+.user-list {
+  display: flex;                /* Use Flexbox layout */
+  flex-wrap: wrap;             /* Allow cards to wrap to the next line if needed */
+  justify-content: center;      /* Center the cards horizontally */
+  padding: 0;                  /* Remove default padding */
+  list-style-type: none;       /* Remove bullet points */
+  margin: 0;                   /* Remove default margin */
+}
+
+.user-list li {              /* Optional: style individual list items if needed */
+  margin: 10px;               /* Add spacing between cards */
+}
+
+.stylist-card {
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin: 10px;
+  padding: 10px;
+  width: 300px; /* You can adjust this width as needed */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  text-align: center; /* Center the text inside the card */
+}
+
+.stylist-list {
+  display: flex;                /* Use Flexbox layout */
+  flex-wrap: wrap;             /* Allow cards to wrap to the next line if needed */
+  justify-content: center;      /* Center the cards horizontally */
+  padding: 0;                  /* Remove default padding */
+  list-style-type: none;       /* Remove bullet points */
+  margin: 0;                   /* Remove default margin */
+}
+
+.stylist-list li {              /* Optional: style individual list items if needed */
+  margin: 10px;               /* Add spacing between cards */
+}
+
+.hairstyle-card {
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin: 10px;
+  padding: 10px;
+  width: 300px; /* You can adjust this width as needed */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  text-align: center; /* Center the text inside the card */
+}
+
+.hairstyle-list {
+  display: flex;                /* Use Flexbox layout */
+  flex-wrap: wrap;             /* Allow cards to wrap to the next line if needed */
+  justify-content: center;      /* Center the cards horizontally */
+  padding: 0;                  /* Remove default padding */
+  list-style-type: none;       /* Remove bullet points */
+  margin: 0;                   /* Remove default margin */
+}
+
+.hairstyle-list li {              /* Optional: style individual list items if needed */
+  margin: 10px;               /* Add spacing between cards */
+}
+
+.hairstyle-image {
+  width: 100%;            /* Make the image take the full width of the card */
+  height: auto;          /* Auto height to maintain aspect ratio */
+  border-radius: 5px;    /* Optional: rounded corners for the image */
+  object-fit: cover;      /* Crop the image if it doesn't fit */
+}
+
+.appointment-card {
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin: 10px;
+  padding: 10px;
+  width: 300px; /* You can adjust this width as needed */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  text-align: center; /* Center the text inside the card */
+}
+
+.appointment-list {
+  display: flex;                /* Use Flexbox layout */
+  flex-wrap: wrap;             /* Allow cards to wrap to the next line if needed */
+  justify-content: center;      /* Center the cards horizontally */
+  padding: 0;                  /* Remove default padding */
+  list-style-type: none;       /* Remove bullet points */
+  margin: 0;                   /* Remove default margin */
+}
+
+.appointment-list li {              /* Optional: style individual list items if needed */
+  margin: 10px;               /* Add spacing between cards */
+}
+
+.zodiac-card {
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin: 10px;
+  padding: 10px;
+  width: 300px; /* You can adjust this width as needed */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  text-align: center; /* Center the text inside the card */
+}
+
+.zodiac-list {
+  display: flex;                /* Use Flexbox layout */
+  flex-wrap: wrap;             /* Allow cards to wrap to the next line if needed */
+  justify-content: center;      /* Center the cards horizontally */
+  padding: 0;                  /* Remove default padding */
+  list-style-type: none;       /* Remove bullet points */
+  margin: 0;                   /* Remove default margin */
+}
+
+.zodiac-list li {              /* Optional: style individual list items if needed */
+  margin: 10px;               /* Add spacing between cards */
+}
+
+
+/* Tailwind CSS directives */
 @tailwind base;
 @tailwind components;
-@tailwind utilities; */
+@tailwind utilities;
 
 
 

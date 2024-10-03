@@ -62,9 +62,7 @@ const LoginForm = ({ onLogin }) => {
         {formik.errors.password && <div style={{ color: 'red' }}>{formik.errors.password}</div>}
       </div>
       {error && <div style={{ color: 'red' }}>{error}</div>}
-      <button type="submit" style={{ padding: '10px 15px', color: '#fff', backgroundColor: '#D1782E', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>
-        Log In
-      </button>
+      <button>Log In</button>
     </form>
   );
 };

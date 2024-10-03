@@ -56,16 +56,15 @@ function UserDetail() {
 
   return (
     <div>
+      <ul className="user-card">
       <h2>User Profile</h2>
       <h3>{user.username}</h3>
       <p>Email: {user.email}</p>
       <p>Birthdate: {formatDate(user.birthdate)}</p>
-
       <button 
         onClick={handleDelete} 
-        style={{ backgroundColor: 'red', color: 'white', padding: '10px', border: 'none', borderRadius: '5px' }}>
-        Delete
-      </button>
+        style={{ backgroundColor: 'red', color: 'white', padding: '10px', border: 'none', borderRadius: '5px' }}>Delete</button>
+      </ul>
     </div>
   );
 }

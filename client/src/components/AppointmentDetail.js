@@ -77,23 +77,19 @@ function AppointmentDetail() {
 
   return (
     <div>
-      <h2>Appointment Details</h2>
-      <p>Appointment ID: {appointment.id}</p>
-      <p>User: {user ? user.username : 'Unknown'}</p>
-      <p>Hairstyle: {hairstyle ? hairstyle.name : 'Unknown'}</p>
-      <p>Price: {hairstyle ? `$${hairstyle.price}` : 'Unknown'}</p>
-      <p>Stylist: {stylist ? stylist.name : 'Unknown'}</p>
-      <p>Date: {formatDate(appointment.date)}</p>
-      <p>Time: {formatTime(appointment.time)}</p>
-
-      <button onClick={handleEdit} style={{ marginRight: '10px' }}>
-        Edit
-      </button>
-      <button onClick={handleDelete} style={{ backgroundColor: 'red', color: 'white' }}>
-        Delete
-      </button>
+      <ul className="appointment-card">
+        <h3>Appointment ID: {appointment.id}</h3>
+        <p>User: {user ? user.username : 'Unknown'}</p>
+        <p>Hairstyle: {hairstyle ? hairstyle.name : 'Unknown'}</p>
+        <p>Price: {hairstyle ? `$${hairstyle.price}` : 'Unknown'}</p>
+        <p>Stylist: {stylist ? stylist.name : 'Unknown'}</p>
+        <p>Date: {formatDate(appointment.date)}</p>
+        <p>Time: {formatTime(appointment.time)}</p>
+        <button onClick={handleEdit}>Edit</button> <button onClick={handleDelete} >Delete</button>
+        </ul>
     </div>
   );
 }
 
 export default AppointmentDetail;
+

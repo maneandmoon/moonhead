@@ -1,7 +1,6 @@
 import React, { useState, useContext } from 'react';
-import './AppointmentCard.css';
 import { useNavigate } from 'react-router-dom';  // Import useNavigate
-import EditAppointmentForm from './EditAppointmentForm';
+// import EditAppointmentForm from './EditAppointmentForm';
 import { AppointmentContext } from './AppointmentContext';
 import formatTime from './formatTime';
 import formatDate from './formatDate';
@@ -42,9 +41,7 @@ function AppointmentCard({ appointment, user, hairstyle, stylist }) {
       <p>Stylist: {stylist ? stylist.name : 'Unknown'}</p>
       <p>Date: {formatDate(appointment.date)}</p>
       <p>Time: {formatTime(appointment.time)}</p>
-
-      <button onClick={handleEdit}>Edit</button>
-      <button onClick={() => deleteAppointment(appointment.id)}>Delete</button>
+      <button onClick={handleEdit}>Edit</button> <button onClick={() => deleteAppointment(appointment.id)}>Delete</button>
     </li>
   );
 }

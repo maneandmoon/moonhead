@@ -14,7 +14,7 @@ const User = () => {
     <div>
       <h1>Users and Appointments</h1>
       {users.length > 0 ? (
-        <ul>
+        <ul className="user-list">
           {users.map(user => (
             <UserCard
               key={user.id}

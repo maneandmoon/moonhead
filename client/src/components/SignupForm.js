@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as yup from "yup";
+
 
 const SignUpSchema = yup.object().shape({
   username: yup.string().required("Username is required"),
@@ -11,6 +13,7 @@ const SignUpSchema = yup.object().shape({
 });
 
 function SignupForm({ onLogin }) {
+  const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
       username: "",
@@ -30,8 +33,8 @@ function SignupForm({ onLogin }) {
         password_confirmation: values.passwordConfirmation,
         birthdate: values.birthdate,
       }));
-
-      fetch("http://localhost:5555/signup", {
+    
+    fetch("http://localhost:5555/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -55,6 +58,8 @@ function SignupForm({ onLogin }) {
         if (response.ok) {
           const user = JSON.parse(text); // Parse if response is ok
           onLogin(user);
+          alert("Sign Up successful!");
+          navigate("/");
         } else {
           const err = JSON.parse(text); // Parse error response
           setErrors({ api: err.errors || ["An unexpected error occurred."] });
@@ -69,8 +74,8 @@ function SignupForm({ onLogin }) {
   });
 
   return (
-    <div style={{ padding: "16px", backgroundColor: "#f9f9f9", borderRadius: "5px" }}>
-      <h2>Sign Up</h2>
+    <div style={{ maxWidth: "400px", margin: "0 auto" }}>
+      
       <form onSubmit={formik.handleSubmit}>
         <div>
           <label>    
@@ -149,6 +154,7 @@ function SignupForm({ onLogin }) {
                 <input
                 type="date"
                 name="birthdate"
+                placeholder="Birthdate mm/dd/yyyy"
                 onChange={formik.handleChange}
                 value={formik.values.birthdate}
                 style={{ width: "100%", padding: "8px", margin: "8px 0" }}
@@ -159,7 +165,7 @@ function SignupForm({ onLogin }) {
             )}
             </div>
 
-        <button type="submit" disabled={formik.isSubmitting} style={{ padding: "10px", backgroundColor: "#D1782E", color: "white", border: "none", cursor: "pointer" }}>
+        <button type="submit" disabled={formik.isSubmitting} >
           {formik.isSubmitting ? "Loading..." : "Sign Up"}
         </button>
 

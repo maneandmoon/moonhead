@@ -51,7 +51,7 @@ const EditAppointment = () => {
     };
   
     return (
-      <div>
+      <div style={{ maxWidth: "400px", margin: "0 auto" }}>
         <h2>Edit Appointment</h2>
         <Formik
           initialValues={initialValues}
@@ -91,12 +91,11 @@ const EditAppointment = () => {
                 <ErrorMessage name="time" component="div" style={{ color: 'red' }} />
               </div>
               <br />
-              <button type="submit" disabled={isSubmitting}>
-                {isSubmitting ? 'Updating...' : 'Save'}
-              </button>
+              <button type="submit" disabled={isSubmitting}>{isSubmitting ? 'Updating...' : 'Save'}</button>
               <button type="button" onClick={closeForm} style={{ marginLeft: '10px' }}>
                 Cancel
               </button>
+              
             </Form>
           )}
         </Formik>

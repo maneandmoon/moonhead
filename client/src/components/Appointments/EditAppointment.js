@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import useAppointments from './useAppointments';
-import formatTime from './formatTime';
+import useAppointments from '../useAppointments';
+import formatTime from '../formatTime';
 
 const EditAppointment = () => {
     const { id } = useParams();

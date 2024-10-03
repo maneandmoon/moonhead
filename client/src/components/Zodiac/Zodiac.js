@@ -1,5 +1,5 @@
 import React from 'react';
-import zodiacSigns from '../data/Zodiac';
+import zodiacSigns from '../../data/Zodiac';
 
 function Zodiac() {
   return (

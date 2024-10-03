@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import HairstyleCard from './HairstyleCard';
-import ZodiacSelector from './ZodiacSelector'; // Import your ZodiacSelector component
+import ZodiacSelector from '../Zodiac/ZodiacSelector'; // Import your ZodiacSelector component
 
 const Hairstyle = () => {
   const [hairstyles, setHairstyles] = useState([]);

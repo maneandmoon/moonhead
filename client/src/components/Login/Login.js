@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import LoginForm from './LoginForm';
-import SignupForm from './SignupForm';
+import SignupForm from '../Signup/SignupForm';
 
 function Login({ onLogin }) {
   const [showLogin, setShowLogin] = useState(true);

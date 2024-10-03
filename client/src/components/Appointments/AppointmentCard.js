@@ -2,8 +2,8 @@ import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';  // Import useNavigate
 // import EditAppointmentForm from './EditAppointmentForm';
 import { AppointmentContext } from './AppointmentContext';
-import formatTime from './formatTime';
-import formatDate from './formatDate';
+import formatTime from '../formatTime';
+import formatDate from '../formatDate';
 
 function AppointmentCard({ appointment, user, hairstyle, stylist }) {
   const { updateAppointment, deleteAppointment } = useContext(AppointmentContext);

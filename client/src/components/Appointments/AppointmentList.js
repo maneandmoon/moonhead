@@ -1,5 +1,5 @@
 import React from 'react';
-import useAppointments from './useAppointments';
+import useAppointments from '../useAppointments';
 import AppointmentCard from './AppointmentCard';
 
 function AppointmentList({ users, hairstyles, stylists }) {

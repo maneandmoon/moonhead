@@ -2,8 +2,8 @@ import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as yup from "yup";
-import formatTime from "./formatTime";
-import useAppointments from './useAppointments';
+import formatTime from "../formatTime";
+import useAppointments from '../useAppointments';
 
 function AppointmentForm({ users, hairstyles, stylists }) {
   const navigate = useNavigate();

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import formatDate from './formatDate';
+import formatDate from '../formatDate';
 
 function UserDetail() {
   const { id } = useParams();  // Get the user ID from URL parameters

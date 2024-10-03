@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from 'react-router-dom';
-import Zodiac from './Zodiac';
+import Zodiac from './Zodiac/Zodiac';
 
 function Home() {
   return (

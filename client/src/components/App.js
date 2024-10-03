@@ -1,25 +1,25 @@
 
 import React, { lazy, Suspense, useState } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
-import NavBar from "./NavBar";
+import NavBar from "./NavBar/NavBar";
 // import { AppointmentProvider, useAppointments } from './AppointmentContext';
-import { AppointmentProvider } from './AppointmentContext';
+import { AppointmentProvider } from './Appointments/AppointmentContext';
 import { useAppointments } from './useAppointments'; // Import the custom hook
 
 // Lazy load components
 const Home = lazy(() => import("./Home"));
-const MoonPhasePage = lazy(() => import("./MoonPhasePage"));
-const AppointmentForm = lazy(() => import("./AppointmentForm"));
-const AppointmentList = lazy(() => import("./AppointmentList"));
-const AppointmentDetail = lazy(() => import("./AppointmentDetail"));
-const EditAppointment = lazy(() => import("./EditAppointment"));
-const Hairstyle = lazy(() => import("./Hairstyle"));
-const Stylist = lazy(() => import("./Stylist"));
-const StylistDetail = lazy(() => import("./StylistDetail"));
-const Login = lazy(() => import("./Login"));
-const Signup = lazy(() => import("./Signup"));
-const User = lazy(() => import("./User"));
-const UserDetail = lazy(() => import("./UserDetail"));
+const MoonPhasePage = lazy(() => import("./Moonphase/MoonPhasePage"));
+const AppointmentForm = lazy(() => import("./Appointments/AppointmentForm"));
+const AppointmentList = lazy(() => import("./Appointments/AppointmentList"));
+const AppointmentDetail = lazy(() => import("./Appointments/AppointmentDetail"));
+const EditAppointment = lazy(() => import("./Appointments/EditAppointment"));
+const Hairstyle = lazy(() => import("./Hairstyle/Hairstyle"));
+const Stylist = lazy(() => import("./Stylist/Stylist"));
+const StylistDetail = lazy(() => import("./Stylist/StylistDetail"));
+const Login = lazy(() => import("./Login/Login"));
+const Signup = lazy(() => import("./Signup/Signup"));
+const User = lazy(() => import("./User/User"));
+const UserDetail = lazy(() => import("./User/UserDetail"));
 
 function App() {
     const [users, setUsers] = useState([]);

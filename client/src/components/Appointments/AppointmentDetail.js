@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import formatTime from './formatTime';
-import formatDate from './formatDate';
+import formatTime from '../formatTime';
+import formatDate from '../formatDate';
 import { AppointmentContext } from './AppointmentContext';
-import useAppointments from './useAppointments';
+import useAppointments from '../useAppointments';
 
 
 function AppointmentDetail() {

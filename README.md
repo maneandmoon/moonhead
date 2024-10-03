@@ -106,6 +106,8 @@ Create a database file from the SQL file:
 
 Alternatively, you can create a migration environment by navigating to cd server and following these prompts to create two new directories-- instance and migrations, where app.db will be added to the instance directory.
 
+  		cd server
+  		
 		flask db init
 		
 		flask db migrate -m "Initial migration."

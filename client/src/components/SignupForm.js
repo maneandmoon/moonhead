@@ -12,8 +12,9 @@ const SignUpSchema = yup.object().shape({
   birthdate: yup.date().required("Birthdate is required"),
 });
 
-function SignupForm({ onLogin }) {
+function SignupForm({ onLogin, addUser }) {
   const navigate = useNavigate();
+
   const formik = useFormik({
     initialValues: {
       username: "",
@@ -23,6 +24,7 @@ function SignupForm({ onLogin }) {
       birthdate: "",
     },
     validationSchema: SignUpSchema,
+
     onSubmit: (values, { setSubmitting, setErrors }) => {
       setSubmitting(true);
 
@@ -58,6 +60,7 @@ function SignupForm({ onLogin }) {
         if (response.ok) {
           const user = JSON.parse(text); // Parse if response is ok
           onLogin(user);
+          // addUser(user);
           alert("Sign Up successful!");
           navigate("/");
         } else {
@@ -72,6 +75,7 @@ function SignupForm({ onLogin }) {
       });
     },
   });
+  
 
   return (
     <div style={{ maxWidth: "400px", margin: "0 auto" }}>
@@ -150,16 +154,15 @@ function SignupForm({ onLogin }) {
         </div>
 
         <div>
-            <label>
+          <label htmlFor="birthdate">Enter Birthdate</label>
                 <input
                 type="date"
                 name="birthdate"
-                placeholder="Birthdate mm/dd/yyyy"
                 onChange={formik.handleChange}
                 value={formik.values.birthdate}
                 style={{ width: "100%", padding: "8px", margin: "8px 0" }}
                 />
-            </label>
+            
             {formik.errors.birthdate && formik.touched.birthdate && (
                 <div style={{ color: "red" }}>{formik.errors.birthdate}</div>
             )}

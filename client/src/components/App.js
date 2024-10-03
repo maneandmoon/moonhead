@@ -40,6 +40,10 @@ function App() {
       setUser(null); // Clear user data on logout
     };
 
+    const addUser = (newUser) => {
+        setUsers((prevUsers) => [...prevUsers, newUser]);
+    };
+
     // Fetch users
     React.useEffect(() => {
         fetch("http://127.0.0.1:5555/users")
@@ -93,7 +97,7 @@ function App() {
                     <Route path="/stylists/:id" element={<StylistDetail />} />
                     <Route path="/hairstyles" element={<Hairstyle />} />
                     <Route path="/login" element={<Login onLogin={login} />} />
-                    <Route path="/signup" element={<Signup onLogin={login} />} /> 
+                    <Route path="/signup" element={<Signup onLogin={login} addUser={addUser} />} /> 
                     <Route path="/users" element={<User />} />
                     <Route path="/users/:id" element={<UserDetail />} />
                 </Routes>

@@ -18,6 +18,8 @@ gunicorn = "*"
 flask-bcrypt = "*"
 requests = "*"
 python-dotenv = "*"
+flask-login = "*"          
+flask-session = "*"        
 
 [requires]
 python_full_version = "3.8.13"

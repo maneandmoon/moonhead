@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import { useNavigate } from "react-router-dom";
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 
 const LoginForm = ({ onLogin }) => {
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues: {
@@ -30,6 +32,8 @@ const LoginForm = ({ onLogin }) => {
       })
       .then((user) => {
         onLogin(user);
+        alert("Login successful!");
+        navigate("/");
       })
       .catch((err) => {
         setError(err.message);

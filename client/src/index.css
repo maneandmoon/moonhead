@@ -1,20 +1,20 @@
 @import './styles/tailwind.css';
 
 :root {
-  --bg: #282c34; /* Dark background */
-  --text: hsla(0, 0%, 100%, 0.88); /* Light text color */
-  --link: #818cf8; /* Link color */
+  --bg: #282c34; 
+  --text: hsla(0, 0%, 100%, 0.88); 
+  --link: #818cf8; 
 }
 
 body {
-  font-family: 'Space Mono', monospace; /* Apply Space Mono font */
+  font-family: 'Space Mono', monospace; 
   background-color: var(--bg); /* Use root variable for background */
   color: var(--text); /* Use root variable for text color */
 }
 
 h1, h2, h3, h4, p, ul, li {
-  font-family: 'Space Mono', monospace; /* Ensure all elements use the same font */
-  color: var(--text); /* Use root variable for text color */
+  font-family: 'Space Mono', monospace; 
+  color: var(--text); 
 }
 
 h1 {
